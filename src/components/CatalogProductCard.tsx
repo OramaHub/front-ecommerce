@@ -9,14 +9,14 @@ interface CatalogProductCardProps {
 
 export function CatalogProductCard({ label, image, title, colors, price, badge }: CatalogProductCardProps) {
   return (
-    <div className="group rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer" style={{ backgroundColor: '#1A1A1A' }}>
-      <div className="bg-white p-6 relative rounded-t-xl">
+    <div className="group rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer" style={{ backgroundColor: '#0D0D0D' }}>
+      <div className="p-6 relative rounded-t-xl" style={{ backgroundColor: '#2A2A2A' }}>
         {badge && (
           <span className="absolute top-4 right-4 bg-black text-white text-[10px] font-bold px-3 py-1 rounded-full font-jakarta">
             {badge}
           </span>
         )}
-        <p className="text-xs font-semibold mb-4 font-jakarta tracking-wide text-black/70">{label}</p>
+        <p className="text-xs font-semibold mb-4 font-jakarta tracking-wide text-white">{label}</p>
         <div className="flex items-center justify-center min-h-[240px] overflow-hidden">
           <img
             src={image}
@@ -34,8 +34,8 @@ export function CatalogProductCard({ label, image, title, colors, price, badge }
         <div className="flex items-end justify-between">
           <div className="flex items-center gap-2.5">
             <div className="flex -space-x-1.5">
+              <div className="w-5 h-5 rounded-full bg-gray-400 border-2 border-white shadow-md"></div>
               <div className="w-5 h-5 rounded-full bg-black border-2 border-white shadow-md"></div>
-              <div className="w-5 h-5 rounded-full bg-white border-2 border-gray-300 shadow-md"></div>
               <div className="w-5 h-5 rounded-full bg-blue-600 border-2 border-white shadow-md"></div>
               <div className="w-5 h-5 rounded-full bg-red-600 border-2 border-white shadow-md"></div>
             </div>
