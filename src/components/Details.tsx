@@ -8,18 +8,18 @@ export function Details() {
   ];
 
   return (
-    <section className="bg-white py-12">
-      <div className="max-w-[1400px] mx-auto flex justify-center items-center gap-x-14">
+    <section className="bg-white pt-8 md:pt-10 lg:pt-12 pb-0">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-0 flex flex-col md:flex-row justify-center items-center gap-y-4 md:gap-y-0 md:gap-x-14">
         {details.map((item, index) => (
           <>
             <div key={item.title} className="text-center">
-              <h3 className="text-lg font-bold text-zinc-900 font-jakarta tracking-wider whitespace-nowrap">
+              <h3 className="text-lg md:text-lg font-bold text-zinc-900 font-jakarta tracking-wider whitespace-nowrap">
                 {item.title}
               </h3>
-              <p className="text-zinc-600 text-sm whitespace-nowrap">{item.subtitle}</p>
+              <p className="text-zinc-600 text-base md:text-sm whitespace-nowrap">{item.subtitle}</p>
             </div>
             {index < details.length - 1 && (
-              <div className="h-14 w-0.5 bg-black/65 my-[4.6875rem]"></div>
+              <div className="hidden md:block h-14 w-0.5 bg-black/65 my-[4.6875rem]"></div>
             )}
           </>
         ))}
