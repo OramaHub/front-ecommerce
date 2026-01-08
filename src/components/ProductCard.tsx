@@ -5,7 +5,7 @@ interface ProductCardProps {
 
 export function ProductCard({ title, image }: ProductCardProps) {
   return (
-    <div className="border border-gray-300 rounded-lg p-6 bg-white">
+    <div className="border border-gray-300 rounded-lg p-6 bg-white transition-transform duration-300 ease-in-out hover:shadow-md cursor-pointer">
       <h3 className="text-base font-medium mb-6 font-jakarta font-medium">{title}</h3>
       <div className="flex items-center justify-center">
         <img src={image} alt={title} className="w-full h-auto max-w-[280px]" />
