@@ -1,0 +1,15 @@
+interface ProductCardProps {
+  title: string;
+  image: string;
+}
+
+export function ProductCard({ title, image }: ProductCardProps) {
+  return (
+    <div className="border border-gray-300 rounded-lg p-6 bg-white">
+      <h3 className="text-base font-medium mb-6 font-jakarta font-medium">{title}</h3>
+      <div className="flex items-center justify-center">
+        <img src={image} alt={title} className="w-full h-auto max-w-[280px]" />
+      </div>
+    </div>
+  );
+}

@@ -22,16 +22,16 @@ export function HeroSlider() {
         className="hero-slider"
       >
         <SwiperSlide>
-          <div className="w-full h-[calc(100vh-230px)] bg-gray-200"></div>
+          <div className="w-full h-[calc(100vh-210px)] bg-gray-200"></div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="w-full h-[calc(100vh-230px)] bg-gray-300"></div>
+          <div className="w-full h-[calc(100vh-210px)] bg-gray-300"></div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="w-full h-[calc(100vh-230px)] bg-gray-400"></div>
+          <div className="w-full h-[calc(100vh-210px)] bg-gray-400"></div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="w-full h-[calc(100vh-230px)] bg-gray-500"></div>
+          <div className="w-full h-[calc(100vh-210px)] bg-gray-500"></div>
         </SwiperSlide>
       </Swiper>
     </div>
