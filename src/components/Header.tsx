@@ -5,6 +5,7 @@ import cartIcon from "../assets/cart-icon.svg";
 import personIcon from "../assets/person-icon.svg";
 import headsetIcon from "../assets/headset-icon.svg";
 import chevronIcon from "../assets/chevrondown-icon.svg";
+import { AppNavigationMenu } from "./NavigationMenu";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -64,38 +65,7 @@ export function Header() {
 
       <nav className="hidden lg:block border-t border-gray-200">
         <div className="max-w-[1600px] mx-auto pl-16">
-          <ul className="flex items-center gap-8 py-4">
-            <li>
-              <NavLink to="/produtos" className="flex items-center gap-2 text-black font-medium font-jakarta text-base">
-                Todos os nossos produtos
-                <img src={chevronIcon} alt="" className="h-1.5" />
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/bones" className="flex items-center gap-2 text-black font-medium font-jakarta text-base">
-                Bonés
-                <img src={chevronIcon} alt="" className="h-1.5" />
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/viseiras" className="flex items-center gap-2 text-black font-medium font-jakarta text-base">
-                Viseiras
-                <img src={chevronIcon} alt="" className="h-1.5" />
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/camisas" className="flex items-center gap-2 text-black font-medium font-jakarta text-base">
-                Camisas
-                <img src={chevronIcon} alt="" className="h-1.5" />
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/personalizacoes" className="flex items-center gap-2 text-black font-medium font-jakarta text-base">
-                Personalizações
-                <img src={chevronIcon} alt="" className="h-1.5" />
-              </NavLink>
-            </li>
-          </ul>
+            <AppNavigationMenu />
         </div>
       </nav>
 
@@ -105,7 +75,6 @@ export function Header() {
             className="fixed inset-0 bg-black/50 z-40 lg:hidden"
             onClick={() => setIsMenuOpen(false)}
           ></div>
-
           <div className="fixed top-0 left-0 w-[80%] max-w-[320px] h-full bg-white z-50 lg:hidden overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-8">
