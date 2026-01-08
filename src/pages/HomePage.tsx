@@ -1,5 +1,9 @@
-import { NavLink } from "react-router";
+import { HeroSlider } from "../components/HeroSlider";
 
 export function HomePage(){
-    return <></>
+    return (
+        <div>
+            <HeroSlider />
+        </div>
+    )
 }

@@ -1,0 +1,25 @@
+.slider-container {
+  width: 100%;
+  padding-bottom: 60px;
+}
+
+.hero-slider .swiper-pagination {
+  position: static !important;
+  margin-top: 16px;
+}
+
+.hero-slider .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: transparent;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  opacity: 1;
+  margin: 0 6px !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-slider .swiper-pagination-bullet-active {
+  background: #000000;
+  border-color: #000000;
+}
