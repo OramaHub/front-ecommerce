@@ -117,13 +117,15 @@ export function AppNavigationMenu() {
       <NavigationMenu.List className="flex items-center gap-8 py-4">
 
         <NavigationMenu.Item value="all-products">
-            <NavigationMenu.Trigger className="flex items-center gap-2 text-black font-medium font-jakarta text-base cursor-pointer group">
-                Todos os nossos produtos
-                <img
-                    src={chevronIcon}
-                    alt=""
-                    className="h-1.5 transition-transform duration-200 group-data-[state=open]:-rotate-180"
-                />
+            <NavigationMenu.Trigger asChild>
+                <NavLink to="/produtos" className="flex items-center gap-2 text-black font-medium font-jakarta text-base cursor-pointer group">
+                    Todos os nossos produtos
+                    <img
+                        src={chevronIcon}
+                        alt=""
+                        className="h-1.5 transition-transform duration-200 group-data-[state=open]:-rotate-180"
+                    />
+                </NavLink>
             </NavigationMenu.Trigger>
             <NavigationMenu.Content className="absolute top-full mt-4 bg-white border border-gray-200 rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95">
                 <div className="flex w-[450px]">
