@@ -109,7 +109,7 @@ export function Header() {
                   </li>
                   <li>
                     <NavLink
-                      to="/bones"
+                      to="/produto/bone-liso"
                       className="flex items-center gap-2 text-black font-medium font-jakarta text-base py-2"
                       onClick={() => setIsMenuOpen(false)}
                     >
@@ -119,7 +119,7 @@ export function Header() {
                   </li>
                   <li>
                     <NavLink
-                      to="/viseiras"
+                      to="/produto/viseira-lisa"
                       className="flex items-center gap-2 text-black font-medium font-jakarta text-base py-2"
                       onClick={() => setIsMenuOpen(false)}
                     >
@@ -129,7 +129,7 @@ export function Header() {
                   </li>
                   <li>
                     <NavLink
-                      to="/camisas"
+                      to="/produto/camiseta-lisa"
                       className="flex items-center gap-2 text-black font-medium font-jakarta text-base py-2"
                       onClick={() => setIsMenuOpen(false)}
                     >

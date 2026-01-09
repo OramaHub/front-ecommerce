@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { Footer } from "../components/Footer";
 import { ChevronDown, Plus, Minus, SlidersHorizontal, X } from "lucide-react";
 import * as Slider from "@radix-ui/react-slider";
 import blackCap from "../assets/black-cap.png";
 
 export function AllProductsPage() {
+  const navigate = useNavigate();
   const [openFilters, setOpenFilters] = useState<Record<string, boolean>>({});
   const [sortOrder, setSortOrder] = useState("Menor preço");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -344,6 +346,7 @@ export function AllProductsPage() {
                 {products.map((product) => (
                   <div
                     key={product.id}
+                    onClick={() => navigate(`/produto/${product.id}`)}
                     className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
                   >
                     {/* Product Image with Badge */}

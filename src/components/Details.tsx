@@ -2,10 +2,10 @@ export function Details() {
   const details = [
     { title: "OS MELHORES PREÇOS", subtitle: "em produtos personalizados." },
     { title: "ENTREGA RÁPIDA", subtitle: "para todo o Brasil." },
-    { title: "ALTA QUbALIDADE", subtitle: "em todos os nossos produtos." },
+    { title: "ALTA QUALIDADE", subtitle: "em todos os nossos produtos." },
     { title: "ATÉ 4X SEM JUROS", subtitle: "no cartão de crédito." },
-    { title: "ALTA VARIEnnDADE", subtitle: "em todos os nossos produtos." },
-  ];1
+    { title: "ALTA VARIEDADE", subtitle: "em todos os nossos produtos." },
+  ];
 
   return (
     <section className="bg-white pt-8 md:pt-10 lg:pt-12 pb-0">
