@@ -1,14 +1,19 @@
 import { CatalogProductCard } from "./CatalogProductCard";
 import blackCap from "../assets/black-cap.png";
+import whiteCap from "../assets/white-cap.png";
+import blackTrucker from "../assets/trucker-black.png";
+import whiteTruckerFull from "../assets/trucker-white-full.png";
+import tShortBlack from "../assets/t-short-black.png";
+import blueTrucker from "../assets/trucker-blue.png";
 
 export function CatalogPreview() {
   const products = [
-    { id: 1, label: "BONÉ LISO PRETO", image: blackCap, title: "Boné Liso Classic", colors: 15, price: "R$ 33,90", badge: "MAIS VENDIDO" },
-    { id: 2, label: "BONÉ LISO PRETO", image: blackCap, title: "Boné Liso Classic", colors: 15, price: "R$ 33,90" },
-    { id: 3, label: "BONÉ LISO PRETO", image: blackCap, title: "Boné Liso Classic", colors: 15, price: "R$ 33,90", badge: "PERSONALIZÁVEL" },
-    { id: 4, label: "BONÉ LISO PRETO", image: blackCap, title: "Boné Liso Classic", colors: 15, price: "R$ 33,90" },
-    { id: 5, label: "BONÉ LISO PRETO", image: blackCap, title: "Boné Liso Classic", colors: 15, price: "R$ 33,90" },
-    { id: 6, label: "BONÉ LISO PRETO", image: blackCap, title: "Boné Liso Classic", colors: 15, price: "R$ 33,90", badge: "NOVIDADE" },
+    { id: 1, label: "BONÉ LISO PRETO", image: blackCap, title: "Boné Liso Classic", colors: 15, price: "R$ 24,90", badge: "MAIS VENDIDO" },
+    { id: 2, label: "BONÉ TRUCKER PRETO", image: blackTrucker, title: "Boné Trucker Black", colors: 16, price: "R$ 29,90" },
+    { id: 3, label: "BONÉ LISO BRANCO", image: whiteCap, title: "Boné Liso White", colors: 15, price: "R$ 24,90", badge: "PERSONALIZÁVEL" },
+    { id: 4, label: "MODELO TRUCKER BRANCO", image: whiteTruckerFull, title: "Modelo Trucker Branco", colors: 16, price: "R$ 29,90" },
+    { id: 5, label: "CAMISETA PRETA", image: tShortBlack, title: "Camiseta Preta", colors: 10, price: "R$ 39,90" },
+    { id: 6, label: "BONÉ TRUCKER AZUL", image: blueTrucker, title: "Boné Trucker Azul", colors: 16, price: "R$ 29,90", badge: "NOVIDADE" },
   ];
 
   return (

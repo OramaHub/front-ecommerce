@@ -1,18 +1,23 @@
 import { useState } from "react";
+import { useParams } from "react-router";
 import { Footer } from "../components/Footer";
 import { Star, Plus, ChevronDown } from "lucide-react";
 import * as Accordion from "@radix-ui/react-accordion";
 import blackCap from "../assets/black-cap.png";
+import blackTrucker from "../assets/trucker-black.png";
+import tShortBlack from "../assets/t-short-black.png";
 
-export function ProductDetailsPage() {
-  const [selectedColor, setSelectedColor] = useState("Branco");
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [cep, setCep] = useState("");
-  const [activeTab, setActiveTab] = useState("avaliacoes");
-
-  // Mock data
-  const product = {
+const productsMap: Record<string, { name: string; subtitle: string; price: number; rating: number; totalRatings: number; totalQuestions: number; images: string[] }> = {
+  "black-trucker": {
+    name: "Boné Trucker Black",
+    subtitle: "Boné Trucker Preto com Tela",
+    price: 29.90,
+    rating: 5.0,
+    totalRatings: 120,
+    totalQuestions: 2,
+    images: [blackTrucker, blackTrucker, blackTrucker],
+  },
+  "bone-liso": {
     name: "Boné Liso Classic",
     subtitle: "Boné Preto Liso Poliéster",
     price: 24.90,
@@ -20,7 +25,29 @@ export function ProductDetailsPage() {
     totalRatings: 120,
     totalQuestions: 2,
     images: [blackCap, blackCap, blackCap],
-  };
+  },
+  "camiseta-preta": {
+    name: "Camiseta Preta",
+    subtitle: "Camiseta Preta 100% Algodão",
+    price: 39.90,
+    rating: 5.0,
+    totalRatings: 80,
+    totalQuestions: 1,
+    images: [tShortBlack, tShortBlack, tShortBlack],
+  },
+};
+
+const defaultProduct = productsMap["bone-liso"];
+
+export function ProductDetailsPage() {
+  const { id } = useParams();
+  const product = productsMap[id || ""] || defaultProduct;
+
+  const [selectedColor, setSelectedColor] = useState("Branco");
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [cep, setCep] = useState("");
+  const [activeTab, setActiveTab] = useState("avaliacoes");
 
   const colors = [
     { name: "Branco", color: "#FFFFFF" },

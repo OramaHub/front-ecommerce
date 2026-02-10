@@ -4,6 +4,7 @@ import { Footer } from "../components/Footer";
 import { ChevronDown, Plus, Minus, SlidersHorizontal, X } from "lucide-react";
 import * as Slider from "@radix-ui/react-slider";
 import blackCap from "../assets/black-cap.png";
+import blackTrucker from "../assets/trucker-black.png";
 
 export function AllProductsPage() {
   const navigate = useNavigate();
@@ -74,15 +75,24 @@ export function AllProductsPage() {
     { name: "Cinza Chumbo", color: "#6B7280" },
   ];
 
-  // Mock products - substituir depois pela API
-  const products = Array(12).fill(null).map((_, index) => ({
-    id: index + 1,
-    name: index === 1 ? "Boné Liso" : "Boné Trucker Tela",
-    badge: "CLÁSSICA E ECONÔMICA",
-    colors: 16,
-    price: 24.90,
-    image: blackCap
-  }));
+  const products = [
+    {
+      id: "bone-liso",
+      name: "Boné Liso",
+      badge: "CLÁSSICA E ECONÔMICA",
+      colors: 16,
+      price: 24.90,
+      image: blackCap,
+    },
+    {
+      id: "black-trucker",
+      name: "Boné Trucker",
+      badge: "CLÁSSICA E ECONÔMICA",
+      colors: 16,
+      price: 29.90,
+      image: blackTrucker,
+    },
+  ];
 
   const FiltersSidebar = () => (
     <div className="space-y-0">

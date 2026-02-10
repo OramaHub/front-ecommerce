@@ -8,49 +8,15 @@ const allProductsSubItems = [
     title: "Bonés",
     path: "/bones",
     subItems: [
-      { title: "Boné liso", path: "/produto/bone-liso" },
-      { title: "Boné bordado", path: "/produto/bone-bordado" },
-      { title: "Boné sublimado", path: "/produto/bone-sublimado" },
-      { title: "Boné trucker", path: "/produto/bone-trucker" },
+      { title: "Modelo Liso", path: "/produto/bone-liso" },
+      { title: "Modelo Trucker", path: "/produto/black-trucker" },
     ],
   },
   {
-    title: "Viseiras",
-    path: "/viseiras",
-    subItems: [
-      { title: "Viseira lisa", path: "/produto/viseira-lisa" },
-      { title: "Viseira bordada", path: "/produto/viseira-bordada" },
-      { title: "Viseira sublimada", path: "/produto/viseira-sublimada" },
-    ],
+    title: "Camisas",
+    path: "/camisas",
+    subItems: [],
   },
-    {
-        title: "Chapéus",
-        path: "/chapeus",
-        subItems: [
-            { title: "Chapéu liso", path: "/produto/chapeu-liso" },
-            { title: "Chapéu bordado", path: "/produto/chapeu-bordado" },
-            { title: "Chapéu de palha", path: "/produto/chapeu-palha" },
-        ],
-    },
-    {
-        title: "Copos",
-        path: "/copos",
-        subItems: [
-            { title: "Copo de plástico", path: "/produto/copo-plastico" },
-            { title: "Copo de acrílico", path: "/produto/copo-acrilico" },
-            { title: "Caneca", path: "/produto/caneca" },
-        ],
-    },
-    {
-        title: "Camisas",
-        path: "/camisas",
-        subItems: [
-            { title: "Camiseta lisa", path: "/produto/camiseta-lisa" },
-            { title: "Camiseta bordada", path: "/produto/camiseta-bordada" },
-            { title: "Camiseta sublimada", path: "/produto/camiseta-sublimada" },
-            { title: "Polo", path: "/produto/polo" },
-        ],
-    }
 ];
 
 const ListItem = React.forwardRef<React.ElementRef<typeof NavLink>, React.ComponentPropsWithoutRef<typeof NavLink>>(

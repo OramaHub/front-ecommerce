@@ -1,11 +1,13 @@
 import { ProductCard } from "./ProductCard";
 import blackCap from "../assets/black-cap.png";
+import blackTrucker from "../assets/trucker-black.png";
+import tShortBlack from "../assets/t-short-black.png";
 
 export function BestSellers() {
   const products = [
-    { id: 1, title: "BONÉ LISO PRETO", image: blackCap },
-    { id: 2, title: "BONÉ LISO PRETO", image: blackCap },
-    { id: 3, title: "BONÉ LISO PRETO", image: blackCap },
+    { id: 1, title: "BONÉ LISO PRETO", image: blackCap, slug: "bone-liso" },
+    { id: 2, title: "BONÉ TRUCKER PRETO", image: blackTrucker, slug: "black-trucker" },
+    { id: 3, title: "CAMISETA PRETA", image: tShortBlack, slug: "camiseta-preta" },
   ];
 
   return (
@@ -14,13 +16,9 @@ export function BestSellers() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-6">
         {products.map((product) => (
-          <ProductCard key={product.id} title={product.title} image={product.image} />
+          <ProductCard key={product.id} title={product.title} image={product.image} slug={product.slug} />
         ))}
       </div>
-
-      <a href="/produtos" className="text-sm md:text-base font-jakarta hover:underline mt-2 inline-block">
-        Ver todos os pedidos
-      </a>
     </section>
   );
 }
