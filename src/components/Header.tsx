@@ -4,11 +4,12 @@ import searchIcon from "../assets/search-icon.svg";
 import cartIcon from "../assets/cart-icon.svg";
 import personIcon from "../assets/person-icon.svg";
 import headsetIcon from "../assets/headset-icon.svg";
-import chevronIcon from "../assets/chevrondown-icon.svg";
 import { AppNavigationMenu } from "./NavigationMenu";
+import { useAuth } from "../contexts/AuthContext";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
 
   return (
     <header className="w-full bg-white border-b border-gray-200">
@@ -56,9 +57,20 @@ export function Header() {
               <img src={cartIcon} alt="Carrinho" className="h-5 lg:h-5.5" />
             </NavLink>
 
-            <NavLink to="/login" className="hidden lg:block ml-[1.875rem]">
-              <img src={personIcon} alt="Login" className="h-5.5" />
-            </NavLink>
+            {isAuthenticated ? (
+              <div className="hidden lg:flex items-center ml-[1.875rem] gap-2">
+                <NavLink to="/minha-conta" className="text-sm font-jakarta font-medium text-black truncate max-w-[120px]">
+                  {user?.name?.split(" ")[0]}
+                </NavLink>
+                <button onClick={logout} className="text-sm font-jakarta text-black/60 hover:text-black transition-colors">
+                  Sair
+                </button>
+              </div>
+            ) : (
+              <NavLink to="/login" className="hidden lg:block ml-[1.875rem]">
+                <img src={personIcon} alt="Login" className="h-5.5" />
+              </NavLink>
+            )}
           </div>
         </div>
       </div>
@@ -104,61 +116,48 @@ export function Header() {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Todos os nossos produtos
-                      <img src={chevronIcon} alt="" className="h-1.5" />
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
-                      to="/produto/bone-liso"
+                      to="/personalize"
                       className="flex items-center gap-2 text-black font-medium font-jakarta text-base py-2"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      Bonés
-                      <img src={chevronIcon} alt="" className="h-1.5" />
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/produto/viseira-lisa"
-                      className="flex items-center gap-2 text-black font-medium font-jakarta text-base py-2"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Viseiras
-                      <img src={chevronIcon} alt="" className="h-1.5" />
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/produto/camiseta-lisa"
-                      className="flex items-center gap-2 text-black font-medium font-jakarta text-base py-2"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Camisas
-                      <img src={chevronIcon} alt="" className="h-1.5" />
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/personalizacoes"
-                      className="flex items-center gap-2 text-black font-medium font-jakarta text-base py-2"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Personalizações
-                      <img src={chevronIcon} alt="" className="h-1.5" />
+                      Personalize
                     </NavLink>
                   </li>
                 </ul>
               </nav>
 
               <div className="border-t border-gray-200 pt-6 space-y-4">
-                <NavLink
-                  to="/login"
-                  className="flex items-center gap-3 text-black font-jakarta text-base py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <img src={personIcon} alt="Login" className="h-5" />
-                  Login
-                </NavLink>
+                {isAuthenticated ? (
+                  <div className="flex flex-col gap-2">
+                    <NavLink
+                      to="/minha-conta"
+                      className="flex items-center gap-3 text-black font-jakarta text-base py-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <img src={personIcon} alt="Conta" className="h-5" />
+                      {user?.name?.split(" ")[0]}
+                    </NavLink>
+                    <button
+                      onClick={() => { logout(); setIsMenuOpen(false); }}
+                      className="flex items-center gap-3 text-black/60 font-jakarta text-base py-2"
+                    >
+                      Sair
+                    </button>
+                  </div>
+                ) : (
+                  <NavLink
+                    to="/login"
+                    className="flex items-center gap-3 text-black font-jakarta text-base py-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <img src={personIcon} alt="Login" className="h-5" />
+                    Login
+                  </NavLink>
+                )}
 
                 <button className="flex items-center gap-3 text-black font-jakarta text-base py-2">
                   <img src={headsetIcon} alt="Atendimento" className="h-5" />

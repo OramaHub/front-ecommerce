@@ -1,6 +1,33 @@
+import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router";
+import { useAuth } from "../contexts/AuthContext";
 import { Footer } from "../components/Footer";
 
 export function LoginPage() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      await login(email, password);
+      navigate("/");
+    } catch (err: any) {
+      const message = err.response?.data?.message || "Email ou senha inválidos.";
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex-1 bg-white flex items-center justify-center py-8 md:py-12 lg:py-16 px-4">
@@ -15,7 +42,13 @@ export function LoginPage() {
             </p>
           </div>
 
-          <form className="space-y-2">
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-jakarta">
+              {error}
+            </div>
+          )}
+
+          <form className="space-y-2" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-jakarta text-black mb-0.5 ml-3">
                 Email
@@ -24,6 +57,9 @@ export function LoginPage() {
                 type="email"
                 id="email"
                 placeholder="email@dominio.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black font-jakarta"
               />
             </div>
@@ -36,6 +72,9 @@ export function LoginPage() {
                 type="password"
                 id="senha"
                 placeholder="******"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black font-jakarta"
               />
               <a href="/recuperar-senha" className="text-sm font-jakarta text-black/60 hover:text-black inline-block mt-1 transition-colors">
@@ -45,9 +84,10 @@ export function LoginPage() {
 
             <button
               type="submit"
-              className="w-full bg-black text-white py-3 rounded-lg font-jakarta font-medium text-base cursor-pointer mt-4"
+              disabled={isLoading}
+              className="w-full bg-black text-white py-3 rounded-lg font-jakarta font-medium text-base cursor-pointer mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              ENTRAR
+              {isLoading ? "ENTRANDO..." : "ENTRAR"}
             </button>
           </form>
         </div>

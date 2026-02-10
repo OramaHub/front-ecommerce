@@ -1,7 +1,10 @@
+import { AuthProvider } from "./contexts/AuthContext";
 import { RoutesWrapper } from "./routes";
 
 export function App() {
   return (
-    <RoutesWrapper />
+    <AuthProvider>
+      <RoutesWrapper />
+    </AuthProvider>
   )
 }

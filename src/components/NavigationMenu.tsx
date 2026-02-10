@@ -53,38 +53,6 @@ const allProductsSubItems = [
     }
 ];
 
-const menuItems = [
-    {
-        title: "Bonés",
-        path: "/bones",
-        subItems: [
-            { title: "Boné liso", path: "/produto/bone-liso" },
-            { title: "Boné bordado", path: "/produto/bone-bordado" },
-            { title: "Boné sublimado", path: "/produto/bone-sublimado" },
-            { title: "Boné trucker", path: "/produto/bone-trucker" },
-        ],
-    },
-    {
-        title: "Viseiras",
-        path: "/viseiras",
-        subItems: [
-            { title: "Viseira lisa", path: "/produto/viseira-lisa" },
-            { title: "Viseira bordada", path: "/produto/viseira-bordada" },
-            { title: "Viseira sublimada", path: "/produto/viseira-sublimada" },
-        ],
-    },
-    {
-        title: "Camisas",
-        path: "/camisas",
-        subItems: [
-            { title: "Camiseta lisa", path: "/produto/camiseta-lisa" },
-            { title: "Camiseta bordada", path: "/produto/camiseta-bordada" },
-            { title: "Camiseta sublimada", path: "/produto/camiseta-sublimada" },
-            { title: "Polo", path: "/produto/polo" },
-        ],
-    }
-]
-
 const ListItem = React.forwardRef<React.ElementRef<typeof NavLink>, React.ComponentPropsWithoutRef<typeof NavLink>>(
     ({ className, title, ...props }, ref) => {
       return (
@@ -108,7 +76,7 @@ export function AppNavigationMenu() {
     const [activeCategory, setActiveCategory] = useState(allProductsSubItems[0]);
 
   return (
-    <NavigationMenu.Root 
+    <NavigationMenu.Root
         className="relative z-50"
         value={value}
         onValueChange={setValue}
@@ -131,7 +99,7 @@ export function AppNavigationMenu() {
                 <div className="flex w-[450px]">
                     <div className="py-3 px-3 space-y-2 min-w-[220px] border-r border-gray-200">
                         {allProductsSubItems.map((item) => (
-                           <button 
+                           <button
                             key={item.path}
                             onMouseEnter={() => setActiveCategory(item)}
                             className={`w-full flex items-center justify-between px-4 py-3 font-jakarta font-semibold text-sm transition-colors rounded-md text-left ${activeCategory.path === item.path ? 'bg-gray-100 text-black' : 'text-gray-600'}`}
@@ -152,32 +120,12 @@ export function AppNavigationMenu() {
             </NavigationMenu.Content>
         </NavigationMenu.Item>
 
-        {menuItems.map((item) => (
-            <NavigationMenu.Item key={item.path} value={item.title}>
-                <NavigationMenu.Trigger className="flex items-center gap-2 text-black font-medium font-jakarta text-base cursor-pointer group">
-                    {item.title}
-                    <img
-                        src={chevronIcon}
-                        alt=""
-                        className="h-1.5 transition-transform duration-200 group-data-[state=open]:-rotate-180"
-                    />
-                </NavigationMenu.Trigger>
-                <NavigationMenu.Content className="absolute top-full mt-4 bg-white border border-gray-200 rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95">
-                    <ul className="py-3 px-3 space-y-2 min-w-[220px]">
-                        {item.subItems.map((subItem) => (
-                            <ListItem key={subItem.path} title={subItem.title} to={subItem.path} />
-                        ))}
-                    </ul>
-                </NavigationMenu.Content>
-            </NavigationMenu.Item>
-        ))}
-
-         <NavigationMenu.Item>
-            <NavigationMenu.Link asChild>
-                <NavLink to="/personalizacoes" className="flex items-center gap-2 text-black font-medium font-jakarta text-base">
-                    Personalizações
-                </NavLink>
-            </NavigationMenu.Link>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link asChild>
+            <NavLink to="/personalize" className="text-black font-medium font-jakarta text-base">
+              Personalize
+            </NavLink>
+          </NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu.List>
     </NavigationMenu.Root>
