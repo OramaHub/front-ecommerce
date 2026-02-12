@@ -216,14 +216,10 @@ export function ProductDetailsPage() {
                 </button>
                 <button
                   onClick={async () => {
-                    if (!isAuthenticated) {
-                      navigate("/login");
-                      return;
-                    }
                     if (!product) return;
                     setAddingToCart(true);
                     try {
-                      await addToCart(product.id, 1);
+                      await addToCart(product.id, 1, product.name, product.price);
                       navigate("/carrinho");
                     } catch {
                       setError("Erro ao adicionar ao carrinho.");

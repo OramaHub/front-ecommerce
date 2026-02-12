@@ -5,9 +5,18 @@ import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
 import { createOrder } from "../services/order-service";
 import blackCap from "../assets/black-cap.png";
+import truckerBlack from "../assets/trucker-black.png";
+import tShortBlack from "../assets/t-short-black.png";
+
+function getFallbackImage(productName: string) {
+  const name = productName.toLowerCase();
+  if (name.includes("trucker")) return truckerBlack;
+  if (name.includes("camiseta") || name.includes("camisa")) return tShortBlack;
+  return blackCap;
+}
 
 export function Cart() {
-  const { cart, loading, updateQuantity, removeItem } = useCart();
+  const { cart, items, total, loading, updateQuantity, removeItem, isLocalCart } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -15,23 +24,6 @@ export function Cart() {
   const [cep, setCep] = useState("");
   const [creatingOrder, setCreatingOrder] = useState(false);
   const [error, setError] = useState("");
-
-  if (!isAuthenticated) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <div className="flex-1 flex flex-col items-center justify-center gap-4 bg-white">
-          <p className="font-jakarta text-gray-600 text-lg">Faça login para acessar seu carrinho</p>
-          <button
-            onClick={() => navigate("/login")}
-            className="bg-black text-white px-8 py-3 rounded-lg font-jakarta font-medium hover:bg-gray-900 transition-colors"
-          >
-            Fazer Login
-          </button>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
 
   if (loading) {
     return (
@@ -44,10 +36,8 @@ export function Cart() {
     );
   }
 
-  const cartItems = cart?.items ?? [];
-  const subtotal = cart?.total ?? 0;
   const artVerificationPrice = artVerification ? 20.00 : 0;
-  const total = subtotal + artVerificationPrice;
+  const finalTotal = total + artVerificationPrice;
 
   const handleUpdateQuantity = async (cartItemId: number, newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -66,7 +56,11 @@ export function Cart() {
     }
   };
 
-  const handleCreateOrder = async () => {
+  const handleContinue = async () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
     if (!cart) return;
     setCreatingOrder(true);
     setError("");
@@ -101,14 +95,14 @@ export function Cart() {
           )}
 
           <div className="border border-gray-300 rounded-lg p-4 md:p-6 mb-3 md:mb-4">
-            {cartItems.length === 0 ? (
+            {items.length === 0 ? (
               <p className="text-gray-500 font-jakarta">Seu carrinho está vazio</p>
             ) : (
               <div className="space-y-4">
-                {cartItems.map((item) => (
+                {items.map((item) => (
                   <div key={item.id} className="flex flex-col md:flex-row gap-3 md:gap-4 pb-4 border-b border-gray-200 last:border-b-0 last:pb-0">
                     <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <img src={blackCap} alt={item.productName} className="w-16 h-16 md:w-20 md:h-20 object-contain" />
+                      <img src={getFallbackImage(item.productName)} alt={item.productName} className="w-16 h-16 md:w-20 md:h-20 object-contain" />
                     </div>
                     <div className="flex-1 flex flex-col gap-2">
                       <div className="flex justify-between items-start">
@@ -203,7 +197,7 @@ export function Cart() {
               <div className="space-y-2 md:space-y-3 mb-4 md:mb-6">
                 <div className="flex justify-between font-jakarta text-sm md:text-base">
                   <span>Subtotal</span>
-                  <span>R$ {subtotal.toFixed(2).replace('.', ',')}</span>
+                  <span>R$ {total.toFixed(2).replace('.', ',')}</span>
                 </div>
                 {artVerification && (
                   <div className="flex justify-between font-jakarta text-sm md:text-base">
@@ -213,15 +207,15 @@ export function Cart() {
                 )}
                 <div className="flex justify-between font-jakarta font-bold text-base md:text-lg">
                   <span>Total</span>
-                  <span>R$ {total.toFixed(2).replace('.', ',')}</span>
+                  <span>R$ {finalTotal.toFixed(2).replace('.', ',')}</span>
                 </div>
               </div>
               <button
-                onClick={handleCreateOrder}
-                disabled={cartItems.length === 0 || creatingOrder}
+                onClick={handleContinue}
+                disabled={items.length === 0 || creatingOrder}
                 className="w-full bg-green-600 text-white py-2.5 md:py-3 text-sm md:text-base rounded-lg font-jakarta font-medium cursor-pointer hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {creatingOrder ? "Criando pedido..." : "Continuar Compra"}
+                {creatingOrder ? "Criando pedido..." : isLocalCart ? "Fazer login e continuar" : "Continuar Compra"}
               </button>
             </div>
           </div>
