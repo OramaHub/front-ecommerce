@@ -1,53 +1,45 @@
-import { useState } from "react";
-import { useParams } from "react-router";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router";
 import { Footer } from "../components/Footer";
 import { Star, Plus, ChevronDown } from "lucide-react";
 import * as Accordion from "@radix-ui/react-accordion";
+import { getProductById } from "../services/product-service";
+import type { Product } from "../types/product";
+import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
 import blackCap from "../assets/black-cap.png";
-import blackTrucker from "../assets/trucker-black.png";
-import tShortBlack from "../assets/t-short-black.png";
-
-const productsMap: Record<string, { name: string; subtitle: string; price: number; rating: number; totalRatings: number; totalQuestions: number; images: string[] }> = {
-  "black-trucker": {
-    name: "Boné Trucker Black",
-    subtitle: "Boné Trucker Preto com Tela",
-    price: 29.90,
-    rating: 5.0,
-    totalRatings: 120,
-    totalQuestions: 2,
-    images: [blackTrucker, blackTrucker, blackTrucker],
-  },
-  "bone-liso": {
-    name: "Boné Liso Classic",
-    subtitle: "Boné Preto Liso Poliéster",
-    price: 24.90,
-    rating: 5.0,
-    totalRatings: 120,
-    totalQuestions: 2,
-    images: [blackCap, blackCap, blackCap],
-  },
-  "camiseta-preta": {
-    name: "Camiseta Preta",
-    subtitle: "Camiseta Preta 100% Algodão",
-    price: 39.90,
-    rating: 5.0,
-    totalRatings: 80,
-    totalQuestions: 1,
-    images: [tShortBlack, tShortBlack, tShortBlack],
-  },
-};
-
-const defaultProduct = productsMap["bone-liso"];
 
 export function ProductDetailsPage() {
   const { id } = useParams();
-  const product = productsMap[id || ""] || defaultProduct;
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const { isAuthenticated } = useAuth();
+
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [addingToCart, setAddingToCart] = useState(false);
 
   const [selectedColor, setSelectedColor] = useState("Branco");
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedImage, setSelectedImage] = useState(0);
   const [cep, setCep] = useState("");
   const [activeTab, setActiveTab] = useState("avaliacoes");
+
+  useEffect(() => {
+    const numericId = Number(id);
+    if (!id || isNaN(numericId)) {
+      setError("Produto não encontrado.");
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    getProductById(numericId)
+      .then((data) => setProduct(data))
+      .catch(() => setError("Erro ao carregar produto."))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   const colors = [
     { name: "Branco", color: "#FFFFFF" },
@@ -83,26 +75,54 @@ export function ProductDetailsPage() {
     { stars: 1, count: 0 },
   ];
 
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <div className="flex-1 flex items-center justify-center">
+          <p className="font-jakarta text-gray-500">Carregando produto...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <div className="flex-1 flex flex-col items-center justify-center gap-4">
+          <p className="font-jakarta text-red-500">{error || "Produto não encontrado."}</p>
+          <button
+            onClick={() => navigate("/produtos")}
+            className="px-6 py-2 bg-black text-white rounded-lg font-jakarta"
+          >
+            Ver todos os produtos
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  const productImages = product.images.length > 0
+    ? product.images.map((img) => img.url)
+    : [blackCap];
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex-1 bg-white">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16 py-4 md:py-6 lg:py-8">
-          {/* Breadcrumb */}
           <div className="text-xs md:text-sm font-jakarta text-gray-600 mb-6">
-            <span className="hover:underline cursor-pointer">Página Inicial</span>
+            <span className="hover:underline cursor-pointer" onClick={() => navigate("/")}>Página Inicial</span>
             <span className="mx-2">/</span>
-            <span className="hover:underline cursor-pointer">Catálogo</span>
+            <span className="hover:underline cursor-pointer" onClick={() => navigate("/produtos")}>Catálogo</span>
             <span className="mx-2">/</span>
-            <span className="font-bold text-black">Boné Liso Preto</span>
+            <span className="font-bold text-black">{product.name}</span>
           </div>
 
-          {/* Main Product Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-16 lg:items-start">
-            {/* Left Column - Image Gallery */}
             <div className="flex gap-4 lg:sticky lg:top-8">
-              {/* Thumbnails */}
               <div className="flex flex-col gap-4">
-                {product.images.map((img, index) => (
+                {productImages.map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
@@ -115,27 +135,23 @@ export function ProductDetailsPage() {
                 ))}
               </div>
 
-              {/* Main Image */}
               <div className="flex-1 bg-gray-100 rounded-lg overflow-hidden aspect-square flex items-center justify-center p-8">
                 <img
-                  src={product.images[selectedImage]}
+                  src={productImages[selectedImage] || blackCap}
                   alt={product.name}
                   className="w-full h-full object-contain"
                 />
               </div>
             </div>
 
-            {/* Right Column - Product Info */}
             <div>
-              {/* Title and Rating */}
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-jakarta mb-1">
                 {product.name}
               </h1>
               <p className="text-sm md:text-base font-jakarta text-gray-600 mb-3">
-                {product.subtitle}
+                {product.description}
               </p>
 
-              {/* Rating */}
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex gap-0.5">
                   {[...Array(5)].map((_, i) => (
@@ -143,16 +159,14 @@ export function ProductDetailsPage() {
                   ))}
                 </div>
                 <span className="text-sm font-jakarta text-gray-600">
-                  {product.totalRatings} Avaliações / {product.totalQuestions} Perguntas
+                  120 Avaliações / 2 Perguntas
                 </span>
               </div>
 
-              {/* Price */}
               <p className="text-xl md:text-2xl font-bold font-jakarta mb-6">
                 A partir de R$ {product.price.toFixed(2).replace('.', ',')} /un
               </p>
 
-              {/* Color Selector */}
               <div className="mb-6">
                 <p className="text-sm font-jakarta font-medium mb-3">Selecione sua cor</p>
                 <div className="flex flex-wrap gap-x-1.5 gap-y-1.5 max-w-[200px]">
@@ -170,7 +184,6 @@ export function ProductDetailsPage() {
                 </div>
               </div>
 
-              {/* Size Selector */}
               <div className="mb-6">
                 <div className="flex gap-3 mb-3">
                   {sizes.map((size) => (
@@ -197,17 +210,34 @@ export function ProductDetailsPage() {
                 </div>
               </div>
 
-              {/* CTA Buttons */}
               <div className="space-y-3 mb-6">
                 <button className="w-full bg-black text-white py-3 md:py-4 rounded-lg font-jakarta font-medium text-base hover:bg-gray-900 transition-colors">
                   Personalizar meu Produto
                 </button>
-                <button className="w-full bg-white text-black py-3 md:py-4 rounded-lg font-jakarta font-medium text-base border border-gray-300 hover:border-black transition-colors">
-                  Comprar sem estampa
+                <button
+                  onClick={async () => {
+                    if (!isAuthenticated) {
+                      navigate("/login");
+                      return;
+                    }
+                    if (!product) return;
+                    setAddingToCart(true);
+                    try {
+                      await addToCart(product.id, 1);
+                      navigate("/carrinho");
+                    } catch {
+                      setError("Erro ao adicionar ao carrinho.");
+                    } finally {
+                      setAddingToCart(false);
+                    }
+                  }}
+                  disabled={addingToCart}
+                  className="w-full bg-white text-black py-3 md:py-4 rounded-lg font-jakarta font-medium text-base border border-gray-300 hover:border-black transition-colors disabled:opacity-50"
+                >
+                  {addingToCart ? "Adicionando..." : "Comprar sem estampa"}
                 </button>
               </div>
 
-              {/* Delivery Section */}
               <div className="mb-6 p-4 border border-gray-200 rounded-lg">
                 <h3 className="text-base font-jakarta font-bold mb-2">Entrega</h3>
                 <p className="text-sm font-jakarta text-gray-600 mb-3">
@@ -227,7 +257,6 @@ export function ProductDetailsPage() {
                 </div>
               </div>
 
-              {/* Accordion Sections */}
               <Accordion.Root type="multiple" className="space-y-0">
                 <Accordion.Item value="tecnica" className="border-b border-gray-200">
                   <Accordion.Trigger className="w-full flex items-center justify-between py-4 font-jakarta text-sm font-medium hover:text-gray-600 group">
@@ -268,7 +297,6 @@ export function ProductDetailsPage() {
             </div>
           </div>
 
-          {/* About Section */}
           <section className="mb-16 max-w-4xl">
             <h2 className="text-2xl md:text-3xl font-bold font-jakarta mb-6">Sobre a peça</h2>
             <div className="space-y-4 text-sm md:text-base font-jakarta text-gray-700 leading-relaxed">
@@ -290,11 +318,9 @@ export function ProductDetailsPage() {
             </div>
           </section>
 
-          {/* Reviews Section */}
           <section className="mb-16">
             <h2 className="text-2xl md:text-3xl font-bold font-jakarta mb-6">Avaliações</h2>
 
-            {/* Tabs */}
             <div className="flex gap-8 border-b border-gray-200 mb-6">
               <button
                 onClick={() => setActiveTab("avaliacoes")}
@@ -320,7 +346,6 @@ export function ProductDetailsPage() {
 
             {activeTab === "avaliacoes" && (
               <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
-                {/* Rating Summary */}
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <button className="ml-auto text-sm font-jakarta text-gray-600 border border-gray-300 px-4 py-2 rounded-lg hover:border-black transition-colors">
@@ -329,18 +354,17 @@ export function ProductDetailsPage() {
                   </div>
 
                   <div className="text-center mb-6">
-                    <div className="text-6xl font-bold font-jakarta mb-2">{product.rating.toFixed(1)}</div>
+                    <div className="text-6xl font-bold font-jakarta mb-2">5.0</div>
                     <div className="flex justify-center gap-1 mb-2">
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
                     <p className="text-sm font-jakarta text-gray-600">
-                      {product.totalRatings} avaliações / {product.totalQuestions} Perguntas
+                      120 avaliações / 2 Perguntas
                     </p>
                   </div>
 
-                  {/* Rating Distribution */}
                   <div className="space-y-2">
                     {ratingDistribution.map((item) => (
                       <div key={item.stars} className="flex items-center gap-2">
@@ -348,7 +372,7 @@ export function ProductDetailsPage() {
                         <div className="flex-1 bg-gray-200 rounded-full h-2">
                           <div
                             className="bg-yellow-400 h-2 rounded-full"
-                            style={{ width: `${(item.count / product.totalRatings) * 100}%` }}
+                            style={{ width: `${(item.count / 120) * 100}%` }}
                           />
                         </div>
                         <span className="text-sm font-jakarta w-8 text-right">{item.count}</span>
@@ -357,9 +381,7 @@ export function ProductDetailsPage() {
                   </div>
                 </div>
 
-                {/* Reviews List */}
                 <div>
-                  {/* Filter Buttons */}
                   <div className="flex gap-3 mb-6">
                     <button className="px-4 py-2 border border-gray-300 rounded-lg font-jakarta text-sm hover:border-black transition-colors flex items-center gap-2">
                       Mais recente
@@ -373,7 +395,6 @@ export function ProductDetailsPage() {
                     </button>
                   </div>
 
-                  {/* Review Items */}
                   <div className="space-y-4">
                     {reviews.map((review, index) => (
                       <div key={index} className="pb-4 border-b border-gray-200">

@@ -1,13 +1,17 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router";
 import { Footer } from "../components/Footer";
 import { ChevronDown, Plus, Minus, SlidersHorizontal, X } from "lucide-react";
 import * as Slider from "@radix-ui/react-slider";
+import { getProducts, searchProducts } from "../services/product-service";
+import type { Product } from "../types/product";
 import blackCap from "../assets/black-cap.png";
-import blackTrucker from "../assets/trucker-black.png";
 
 export function AllProductsPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("search") || "";
+
   const [openFilters, setOpenFilters] = useState<Record<string, boolean>>({});
   const [sortOrder, setSortOrder] = useState("Menor preço");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -17,6 +21,53 @@ export function AllProductsPage() {
   const [priceRange, setPriceRange] = useState(0);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const maxPrice = 299;
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+
+  const getSortParam = (order: string) => {
+    switch (order) {
+      case "Maior preço":
+        return "price,desc";
+      default:
+        return "price,asc";
+    }
+  };
+
+  useEffect(() => {
+    setPage(0);
+  }, [sortOrder, searchTerm]);
+
+  useEffect(() => {
+    setLoading(true);
+    setError("");
+
+    const fetchData = searchTerm
+      ? searchProducts(searchTerm, page, 12)
+      : getProducts(page, 12, getSortParam(sortOrder));
+
+    fetchData
+      .then((data) => {
+        if (page === 0) {
+          setProducts(data.content);
+        } else {
+          setProducts((prev) => [...prev, ...data.content]);
+        }
+        setTotalPages(data.totalPages);
+        setTotalElements(data.totalElements);
+      })
+      .catch(() => setError("Erro ao carregar produtos."))
+      .finally(() => setLoading(false));
+  }, [page, sortOrder, searchTerm]);
+
+  const filteredProducts =
+    priceRange > 0
+      ? products.filter((p) => p.price <= priceRange)
+      : products;
 
   const toggleFilter = (filterName: string) => {
     setOpenFilters(prev => ({
@@ -75,28 +126,8 @@ export function AllProductsPage() {
     { name: "Cinza Chumbo", color: "#6B7280" },
   ];
 
-  const products = [
-    {
-      id: "bone-liso",
-      name: "Boné Liso",
-      badge: "CLÁSSICA E ECONÔMICA",
-      colors: 16,
-      price: 24.90,
-      image: blackCap,
-    },
-    {
-      id: "black-trucker",
-      name: "Boné Trucker",
-      badge: "CLÁSSICA E ECONÔMICA",
-      colors: 16,
-      price: 29.90,
-      image: blackTrucker,
-    },
-  ];
-
   const FiltersSidebar = () => (
     <div className="space-y-0">
-      {/* Categoria */}
       <div className="border-b border-gray-300">
         <button
           onClick={() => toggleFilter('categoria')}
@@ -131,7 +162,6 @@ export function AllProductsPage() {
         )}
       </div>
 
-      {/* Tamanhos */}
       <div className="border-b border-gray-300">
         <button
           onClick={() => toggleFilter('tamanhos')}
@@ -166,7 +196,6 @@ export function AllProductsPage() {
         )}
       </div>
 
-      {/* Cores */}
       <div className="border-b border-gray-300">
         <button
           onClick={() => toggleFilter('cores')}
@@ -207,7 +236,6 @@ export function AllProductsPage() {
         )}
       </div>
 
-      {/* Malhas */}
       <div className="border-b border-gray-300">
         <button
           onClick={() => toggleFilter('malhas')}
@@ -242,7 +270,6 @@ export function AllProductsPage() {
         )}
       </div>
 
-      {/* Preço */}
       <div className="border-b border-gray-300">
         <button
           onClick={() => toggleFilter('preco')}
@@ -291,24 +318,25 @@ export function AllProductsPage() {
     <div className="flex flex-col min-h-screen">
       <div className="flex-1 bg-white">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16 py-4 md:py-6 lg:py-8">
-          {/* Breadcrumb */}
           <div className="text-xs md:text-sm font-jakarta text-gray-600 mb-4 md:mb-6">
-            <span className="hover:underline cursor-pointer">Página Inicial</span>
+            <span className="hover:underline cursor-pointer" onClick={() => navigate("/")}>Página Inicial</span>
             <span className="mx-2">/</span>
-            <span className="font-bold text-black">Todos os nossos produtos</span>
+            <span className="font-bold text-black">
+              {searchTerm ? `Resultados para "${searchTerm}"` : "Todos os nossos produtos"}
+            </span>
           </div>
 
-          {/* Title Section */}
           <div className="mb-4 md:mb-6 lg:mb-8">
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold font-jakarta mb-1 md:mb-2">
-              Todos os Nossos Produtos
+              {searchTerm ? `Resultados para "${searchTerm}"` : "Todos os Nossos Produtos"}
             </h1>
             <p className="text-xs sm:text-sm md:text-base font-jakarta text-gray-600">
-              Confira a nossa confecção de produtos de alta qualidade
+              {searchTerm
+                ? `${totalElements} produto(s) encontrado(s)`
+                : "Confira a nossa confecção de produtos de alta qualidade"}
             </p>
           </div>
 
-          {/* Mobile Filters Button */}
           <div className="lg:hidden mb-4">
             <button
               onClick={() => setShowMobileFilters(true)}
@@ -319,19 +347,15 @@ export function AllProductsPage() {
             </button>
           </div>
 
-          {/* Main Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 lg:gap-8 mb-12 md:mb-16 lg:items-start">
-            {/* Desktop Filters Sidebar */}
             <aside className="hidden lg:block lg:pt-14">
               <FiltersSidebar />
             </aside>
 
-            {/* Products Grid */}
             <div>
-              {/* Sort Dropdown */}
               <div className="flex justify-between items-center mb-4 md:mb-6">
                 <span className="text-sm font-jakarta text-gray-600 lg:hidden">
-                  {products.length} produtos
+                  {totalElements} produtos
                 </span>
                 <div className="flex items-center gap-2 ml-auto">
                   <label className="text-xs md:text-sm font-jakarta text-gray-600">Ordenar por</label>
@@ -351,60 +375,63 @@ export function AllProductsPage() {
                 </div>
               </div>
 
-              {/* Products Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-                {products.map((product) => (
-                  <div
-                    key={product.id}
-                    onClick={() => navigate(`/produto/${product.id}`)}
-                    className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-                  >
-                    {/* Product Image with Badge */}
-                    <div className="bg-[#E8DDD4] aspect-[3/4] flex items-center justify-center p-3 sm:p-4 md:p-6 relative">
-                      <div className="absolute top-2 sm:top-3 md:top-4 left-2 sm:left-3 md:left-4 bg-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded flex items-center justify-center">
-                        <span className="text-[7px] sm:text-[9px] md:text-[11px] font-jakarta font-bold tracking-wide leading-none">
-                          {product.badge}
-                        </span>
-                      </div>
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
+              {error && (
+                <p className="font-jakarta text-red-500 mb-4">{error}</p>
+              )}
 
-                    {/* Product Info */}
-                    <div className="p-2 sm:p-3 md:p-4 bg-white">
-                      <h3 className="font-jakarta text-xs sm:text-sm md:text-base font-semibold mb-1.5 sm:mb-2 md:mb-3 line-clamp-1">
-                        {product.name}
-                      </h3>
+              {loading && page === 0 ? (
+                <p className="font-jakarta text-gray-500">Carregando produtos...</p>
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+                    {filteredProducts.map((product) => (
+                      <div
+                        key={product.id}
+                        onClick={() => navigate(`/produto/${product.id}`)}
+                        className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                      >
+                        <div className="bg-[#E8DDD4] aspect-[3/4] flex items-center justify-center p-3 sm:p-4 md:p-6 relative">
+                          <img
+                            src={product.images[0]?.url || blackCap}
+                            alt={product.name}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
 
-                      <div className="flex items-end justify-between gap-1">
-                        <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 min-w-0">
-                          <div className="flex -space-x-0.5 sm:-space-x-1 md:-space-x-1.5 flex-shrink-0">
-                            <div className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-gray-800 border-[1.5px] sm:border-2 border-white"></div>
-                            <div className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-blue-900 border-[1.5px] sm:border-2 border-white"></div>
+                        <div className="p-2 sm:p-3 md:p-4 bg-white">
+                          <h3 className="font-jakarta text-xs sm:text-sm md:text-base font-semibold mb-1.5 sm:mb-2 md:mb-3 line-clamp-1">
+                            {product.name}
+                          </h3>
+
+                          <div className="flex items-end justify-end">
+                            <div className="text-right flex-shrink-0">
+                              <p className="text-[7px] sm:text-[8px] md:text-[10px] font-jakarta text-gray-600 leading-tight">A partir de</p>
+                              <p className="font-jakarta text-sm sm:text-base md:text-lg font-bold leading-tight">
+                                R$ {product.price.toFixed(2).replace('.', ',')}
+                              </p>
+                            </div>
                           </div>
-                          <span className="text-[10px] sm:text-xs md:text-sm font-jakarta text-gray-700 whitespace-nowrap">
-                            {product.colors} cores
-                          </span>
-                        </div>
-
-                        <div className="text-right flex-shrink-0">
-                          <p className="text-[7px] sm:text-[8px] md:text-[10px] font-jakarta text-gray-600 leading-tight">A partir de</p>
-                          <p className="font-jakarta text-sm sm:text-base md:text-lg font-bold leading-tight">
-                            R$ {product.price.toFixed(2).replace('.', ',')}
-                          </p>
                         </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+
+                  {page + 1 < totalPages && (
+                    <div className="flex justify-center mt-8">
+                      <button
+                        onClick={() => setPage((prev) => prev + 1)}
+                        disabled={loading}
+                        className="px-8 py-3 bg-black text-white rounded-lg font-jakarta font-medium hover:bg-gray-900 transition-colors disabled:opacity-50"
+                      >
+                        {loading ? "Carregando..." : "Carregar mais"}
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
 
-          {/* Personalization Section */}
           <section className="mb-12 md:mb-16 max-w-4xl">
             <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold font-jakarta mb-4 md:mb-6">
               Personalize seu Produto com a gente
@@ -423,7 +450,6 @@ export function AllProductsPage() {
         </div>
       </div>
 
-      {/* Mobile Filters Modal */}
       {showMobileFilters && (
         <>
           <div

@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router";
+
 interface CatalogProductCardProps {
+  id: number;
   label: string;
   image: string;
   title: string;
@@ -7,9 +10,15 @@ interface CatalogProductCardProps {
   badge?: string;
 }
 
-export function CatalogProductCard({ label, image, title, colors, price, badge }: CatalogProductCardProps) {
+export function CatalogProductCard({ id, label, image, title, colors, price, badge }: CatalogProductCardProps) {
+  const navigate = useNavigate();
+
   return (
-    <div className="group rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer" style={{ backgroundColor: '#0D0D0D' }}>
+    <div
+      onClick={() => navigate(`/produto/${id}`)}
+      className="group rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+      style={{ backgroundColor: '#0D0D0D' }}
+    >
       <div className="p-6 relative rounded-t-xl" style={{ backgroundColor: '#2A2A2A' }}>
         {badge && (
           <span className="absolute top-4 right-4 bg-black text-white text-[10px] font-bold px-3 py-1 rounded-full font-jakarta">
