@@ -1,15 +1,30 @@
 import { useState } from "react";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import searchIcon from "../assets/search-icon.svg";
 import cartIcon from "../assets/cart-icon.svg";
 import personIcon from "../assets/person-icon.svg";
 import headsetIcon from "../assets/headset-icon.svg";
 import { AppNavigationMenu } from "./NavigationMenu";
 import { useAuth } from "../contexts/AuthContext";
+import { useCart } from "../contexts/CartContext";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [mobileSearchTerm, setMobileSearchTerm] = useState("");
   const { user, isAuthenticated, logout } = useAuth();
+  const { itemCount } = useCart();
+  const navigate = useNavigate();
+
+  const handleSearch = (term: string) => {
+    const trimmed = term.trim();
+    if (trimmed) {
+      navigate(`/produtos?search=${encodeURIComponent(trimmed)}`);
+      setSearchTerm("");
+      setMobileSearchTerm("");
+      setIsMenuOpen(false);
+    }
+  };
 
   return (
     <header className="w-full bg-white border-b border-gray-200">
@@ -37,9 +52,15 @@ export function Header() {
               <input
                 type="text"
                 placeholder="Pesquisar produto..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch(searchTerm)}
                 className="w-full px-4 py-2 pr-15 border border-black/35 rounded-[0.5rem] focus:outline-none focus:border-black/50 font-jakarta"
               />
-              <button className="absolute right-6 top-1/2 -translate-y-1/2">
+              <button
+                className="absolute right-6 top-1/2 -translate-y-1/2"
+                onClick={() => handleSearch(searchTerm)}
+              >
                 <img src={searchIcon} alt="Pesquisar" className="h-4" />
               </button>
             </div>
@@ -53,8 +74,13 @@ export function Header() {
               </button>
             </div>
 
-            <NavLink to="/carrinho" className="ml-4 lg:ml-[2.3125rem]">
+            <NavLink to="/carrinho" className="ml-4 lg:ml-[2.3125rem] relative">
               <img src={cartIcon} alt="Carrinho" className="h-5 lg:h-5.5" />
+              {itemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center font-jakarta">
+                  {itemCount > 99 ? "99+" : itemCount}
+                </span>
+              )}
             </NavLink>
 
             {isAuthenticated ? (
@@ -100,9 +126,15 @@ export function Header() {
                 <input
                   type="text"
                   placeholder="Pesquisar produto..."
+                  value={mobileSearchTerm}
+                  onChange={(e) => setMobileSearchTerm(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch(mobileSearchTerm)}
                   className="w-full px-4 py-2 pr-10 border border-black/35 rounded-lg focus:outline-none focus:border-black/50 font-jakarta"
                 />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2">
+                <button
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  onClick={() => handleSearch(mobileSearchTerm)}
+                >
                   <img src={searchIcon} alt="Pesquisar" className="h-4" />
                 </button>
               </div>
