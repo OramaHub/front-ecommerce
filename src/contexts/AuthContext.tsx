@@ -23,10 +23,10 @@ function decodeToken(token: string): User | null {
   try {
     const payload = JSON.parse(atob(token.split(".")[1]));
     return {
-      id: payload.sub || payload.id,
-      email: payload.email,
-      name: payload.name,
-      role: payload.role,
+      id: String(payload.id),
+      email: payload.sub,
+      name: payload.name ?? "",
+      role: payload.role ?? "",
     };
   } catch {
     return null;
