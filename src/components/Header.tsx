@@ -21,6 +21,7 @@ function getFallbackImage(productName: string) {
 }
 
 export function Header() {
+  const [showSupportBox, setShowSupportBox] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [mobileSearchTerm, setMobileSearchTerm] = useState("");
@@ -104,7 +105,10 @@ export function Header() {
           </button>
 
           <div className="pl-0 lg:pl-16">
-            <NavLink to="/" className="text-base md:text-lg lg:text-2xl font-bold text-black font-jakarta">
+            <NavLink
+              to="/"
+              className="text-base md:text-lg lg:text-2xl font-bold text-black font-jakarta"
+            >
               MT PERSONALIZADOS
             </NavLink>
           </div>
@@ -117,7 +121,11 @@ export function Header() {
                 value={searchTerm}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch(searchTerm)}
-                onFocus={() => searchTerm.trim().length >= 2 && searchResults.length > 0 && setShowResults(true)}
+                onFocus={() =>
+                  searchTerm.trim().length >= 2 &&
+                  searchResults.length > 0 &&
+                  setShowResults(true)
+                }
                 className="w-full px-4 py-2 pr-15 border border-black/35 rounded-[0.5rem] focus:outline-none focus:border-black/50 font-jakarta"
               />
               <button
@@ -131,11 +139,15 @@ export function Header() {
                 <div className="absolute top-full mt-2 left-0 w-full bg-white border border-gray-200 rounded-lg shadow-xl z-50 overflow-hidden">
                   {searchLoading ? (
                     <div className="p-4">
-                      <p className="font-jakarta text-sm text-gray-500">Buscando...</p>
+                      <p className="font-jakarta text-sm text-gray-500">
+                        Buscando...
+                      </p>
                     </div>
                   ) : searchResults.length === 0 ? (
                     <div className="p-4">
-                      <p className="font-jakarta text-sm text-gray-500">Nenhum produto encontrado</p>
+                      <p className="font-jakarta text-sm text-gray-500">
+                        Nenhum produto encontrado
+                      </p>
                     </div>
                   ) : (
                     <div className="py-2">
@@ -147,15 +159,20 @@ export function Header() {
                         >
                           <div className="bg-[#F0EBE5] rounded-lg w-16 h-16 flex-shrink-0 flex items-center justify-center p-2">
                             <img
-                              src={product.images[0]?.url || getFallbackImage(product.name)}
+                              src={
+                                product.images[0]?.url ||
+                                getFallbackImage(product.name)
+                              }
                               alt={product.name}
                               className="max-w-full max-h-full object-contain"
                             />
                           </div>
                           <div className="flex-1 text-left">
-                            <p className="text-sm font-jakarta font-medium text-black/70 group-hover:text-black transition-colors">{product.name}</p>
+                            <p className="text-sm font-jakarta font-medium text-black/70 group-hover:text-black transition-colors">
+                              {product.name}
+                            </p>
                             <p className="text-sm font-jakarta font-bold text-black mt-0.5">
-                              R$ {product.price.toFixed(2).replace('.', ',')}
+                              R$ {product.price.toFixed(2).replace(".", ",")}
                             </p>
                           </div>
                         </button>
@@ -172,13 +189,38 @@ export function Header() {
               )}
             </div>
           </div>
-
-          <div className="flex items-center pr-4 md:pr-8 lg:pr-24 ml-auto lg:ml-0">
-            <div className="hidden lg:flex items-center lg:ml-[5.625rem]">
-              <button className="flex items-center">
+          <div>
+            <div
+              className="hidden lg:flex items-center relative lg:ml-6"
+              onMouseEnter={() => setShowSupportBox(true)}
+              onMouseLeave={() => setShowSupportBox(false)}
+            >
+              <button className="flex items-center whitespace-nowrap">
                 <img src={headsetIcon} alt="Atendimento" className="h-5.5" />
-                <span className="ml-[1.6rem] text-[1rem] font-jakarta font-normal">Central de atendimento</span>
+                <span className="ml-4 text-[1rem] font-jakarta font-normal">
+                  Central de atendimento
+                </span>
               </button>
+
+              {showSupportBox && (
+                <div className="absolute top-full right-0 mt-3 w-72 bg-white border border-gray-200 shadow-xl rounded-xl p-4 z-50">
+                  <p className="font-jakarta font-semibold mb-3 text-sm">
+                    Central de Atendimento
+                  </p>
+
+                  <div className="space-y-2 text-sm font-jakarta text-black/80">
+                    <p>
+                      📞 <strong>Telefone:</strong> (83) 99999-9999
+                    </p>
+                    <p>
+                      💬 <strong>WhatsApp:</strong> (83) 98888-8888
+                    </p>
+                    <p>
+                      🕒 <strong>Horário:</strong> 08:00 às 18:00
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             <NavLink to="/carrinho" className="ml-4 lg:ml-[2.3125rem] relative">
@@ -192,10 +234,16 @@ export function Header() {
 
             {isAuthenticated ? (
               <div className="hidden lg:flex items-center ml-[1.875rem] gap-2">
-                <NavLink to="/minha-conta" className="text-sm font-jakarta font-medium text-black truncate max-w-[120px]">
+                <NavLink
+                  to="/minha-conta"
+                  className="text-sm font-jakarta font-medium text-black truncate max-w-[120px]"
+                >
                   {user?.name?.split(" ")[0]}
                 </NavLink>
-                <button onClick={logout} className="text-sm font-jakarta text-black/60 hover:text-black transition-colors">
+                <button
+                  onClick={logout}
+                  className="text-sm font-jakarta text-black/60 hover:text-black transition-colors"
+                >
                   Sair
                 </button>
               </div>
@@ -210,7 +258,7 @@ export function Header() {
 
       <nav className="hidden lg:block border-t border-gray-200">
         <div className="max-w-[1600px] mx-auto pl-16">
-            <AppNavigationMenu />
+          <AppNavigationMenu />
         </div>
       </nav>
 
@@ -224,7 +272,10 @@ export function Header() {
             <div className="p-6">
               <div className="flex justify-between items-center mb-8">
                 <h2 className="text-xl font-bold font-jakarta">Menu</h2>
-                <button onClick={() => setIsMenuOpen(false)} className="text-2xl">
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-2xl"
+                >
                   ×
                 </button>
               </div>
@@ -235,7 +286,9 @@ export function Header() {
                   placeholder="Pesquisar produto..."
                   value={mobileSearchTerm}
                   onChange={(e) => setMobileSearchTerm(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSearch(mobileSearchTerm)}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" && handleSearch(mobileSearchTerm)
+                  }
                   className="w-full px-4 py-2 pr-10 border border-black/35 rounded-lg focus:outline-none focus:border-black/50 font-jakarta"
                 />
                 <button
@@ -281,7 +334,10 @@ export function Header() {
                       {user?.name?.split(" ")[0]}
                     </NavLink>
                     <button
-                      onClick={() => { logout(); setIsMenuOpen(false); }}
+                      onClick={() => {
+                        logout();
+                        setIsMenuOpen(false);
+                      }}
                       className="flex items-center gap-3 text-black/60 font-jakarta text-base py-2"
                     >
                       Sair
