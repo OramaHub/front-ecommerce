@@ -3,6 +3,15 @@ import { ProductCard } from "./ProductCard";
 import { getProducts } from "../services/product-service";
 import type { Product } from "../types/product";
 import blackCap from "../assets/black-cap.png";
+import truckerBlack from "../assets/trucker-black.png";
+import tShortBlack from "../assets/t-short-black.png";
+
+function getFallbackImage(productName: string) {
+  const name = productName.toLowerCase();
+  if (name.includes("trucker")) return truckerBlack;
+  if (name.includes("camiseta") || name.includes("camisa")) return tShortBlack;
+  return blackCap;
+}
 
 export function BestSellers() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -28,8 +37,7 @@ export function BestSellers() {
               key={product.id}
               id={product.id}
               title={product.name}
-              image={product.images[0]?.url || blackCap}
-              price={product.price}
+              image={product.images[0]?.url || getFallbackImage(product.name)}
             />
           ))}
         </div>

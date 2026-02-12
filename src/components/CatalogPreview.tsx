@@ -3,6 +3,15 @@ import { CatalogProductCard } from "./CatalogProductCard";
 import { getProducts } from "../services/product-service";
 import type { Product } from "../types/product";
 import blackCap from "../assets/black-cap.png";
+import truckerBlack from "../assets/trucker-black.png";
+import tShortBlack from "../assets/t-short-black.png";
+
+function getFallbackImage(productName: string) {
+  const name = productName.toLowerCase();
+  if (name.includes("trucker")) return truckerBlack;
+  if (name.includes("camiseta") || name.includes("camisa")) return tShortBlack;
+  return blackCap;
+}
 
 export function CatalogPreview() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -31,7 +40,7 @@ export function CatalogPreview() {
                 key={product.id}
                 id={product.id}
                 label={product.name.toUpperCase()}
-                image={product.images.length > 0 ? product.images[0].url : blackCap}
+                image={product.images.length > 0 ? product.images[0].url : getFallbackImage(product.name)}
                 title={product.name}
                 colors={14}
                 price={`R$ ${product.price.toFixed(2).replace('.', ',')}`}
