@@ -1,17 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { NavLink, useNavigate } from "react-router";
 import searchIcon from "../assets/search-icon.svg";
 import cartIcon from "../assets/cart-icon.svg";
 import personIcon from "../assets/person-icon.svg";
 import headsetIcon from "../assets/headset-icon.svg";
+import blackCap from "../assets/black-cap.png";
+import truckerBlack from "../assets/trucker-black.png";
+import tShortBlack from "../assets/t-short-black.png";
 import { AppNavigationMenu } from "./NavigationMenu";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
+import { searchProducts } from "../services/product-service";
+import type { Product } from "../types/product";
+
+function getFallbackImage(productName: string) {
+  const name = productName.toLowerCase();
+  if (name.includes("trucker")) return truckerBlack;
+  if (name.includes("camiseta") || name.includes("camisa")) return tShortBlack;
+  return blackCap;
+}
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [mobileSearchTerm, setMobileSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [showResults, setShowResults] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
   const { user, isAuthenticated, logout } = useAuth();
   const { itemCount } = useCart();
   const navigate = useNavigate();
@@ -23,7 +40,52 @@ export function Header() {
       setSearchTerm("");
       setMobileSearchTerm("");
       setIsMenuOpen(false);
+      setShowResults(false);
     }
+  };
+
+  const doLiveSearch = useCallback((term: string) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    if (term.trim().length < 2) {
+      setSearchResults([]);
+      setShowResults(false);
+      return;
+    }
+
+    debounceRef.current = setTimeout(async () => {
+      setSearchLoading(true);
+      try {
+        const data = await searchProducts(term.trim(), 0, 6);
+        setSearchResults(data.content);
+        setShowResults(true);
+      } catch {
+        setSearchResults([]);
+      } finally {
+        setSearchLoading(false);
+      }
+    }, 300);
+  }, []);
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    doLiveSearch(value);
+  };
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setShowResults(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const navigateToProduct = (id: number) => {
+    setSearchTerm("");
+    setShowResults(false);
+    navigate(`/produto/${id}`);
   };
 
   return (
@@ -48,13 +110,14 @@ export function Header() {
           </div>
 
           <div className="hidden lg:flex flex-1 lg:ml-[4.625rem]">
-            <div className="relative w-full max-w-[850px]">
+            <div className="relative w-full max-w-[850px]" ref={searchRef}>
               <input
                 type="text"
                 placeholder="Pesquisar produto..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch(searchTerm)}
+                onFocus={() => searchTerm.trim().length >= 2 && searchResults.length > 0 && setShowResults(true)}
                 className="w-full px-4 py-2 pr-15 border border-black/35 rounded-[0.5rem] focus:outline-none focus:border-black/50 font-jakarta"
               />
               <button
@@ -63,6 +126,50 @@ export function Header() {
               >
                 <img src={searchIcon} alt="Pesquisar" className="h-4" />
               </button>
+
+              {showResults && (
+                <div className="absolute top-full mt-2 left-0 w-full bg-white border border-gray-200 rounded-lg shadow-xl z-50 overflow-hidden">
+                  {searchLoading ? (
+                    <div className="p-4">
+                      <p className="font-jakarta text-sm text-gray-500">Buscando...</p>
+                    </div>
+                  ) : searchResults.length === 0 ? (
+                    <div className="p-4">
+                      <p className="font-jakarta text-sm text-gray-500">Nenhum produto encontrado</p>
+                    </div>
+                  ) : (
+                    <div className="py-2">
+                      {searchResults.map((product) => (
+                        <button
+                          key={product.id}
+                          onClick={() => navigateToProduct(product.id)}
+                          className="group w-full flex items-center gap-4 px-4 py-3 hover:bg-gray-50 transition-colors"
+                        >
+                          <div className="bg-[#F0EBE5] rounded-lg w-16 h-16 flex-shrink-0 flex items-center justify-center p-2">
+                            <img
+                              src={product.images[0]?.url || getFallbackImage(product.name)}
+                              alt={product.name}
+                              className="max-w-full max-h-full object-contain"
+                            />
+                          </div>
+                          <div className="flex-1 text-left">
+                            <p className="text-sm font-jakarta font-medium text-black/70 group-hover:text-black transition-colors">{product.name}</p>
+                            <p className="text-sm font-jakarta font-bold text-black mt-0.5">
+                              R$ {product.price.toFixed(2).replace('.', ',')}
+                            </p>
+                          </div>
+                        </button>
+                      ))}
+                      <button
+                        onClick={() => handleSearch(searchTerm)}
+                        className="w-full mt-1 pt-2.5 pb-2 border-t border-gray-200 text-center text-sm font-jakarta font-medium text-black/60 hover:text-black transition-colors"
+                      >
+                        Ver todos os resultados
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
