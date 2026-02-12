@@ -6,11 +6,21 @@ import * as Slider from "@radix-ui/react-slider";
 import { getProducts, searchProducts } from "../services/product-service";
 import type { Product } from "../types/product";
 import blackCap from "../assets/black-cap.png";
+import truckerBlack from "../assets/trucker-black.png";
+import tShortBlack from "../assets/t-short-black.png";
+
+function getFallbackImage(productName: string) {
+  const name = productName.toLowerCase();
+  if (name.includes("trucker")) return truckerBlack;
+  if (name.includes("camiseta") || name.includes("camisa")) return tShortBlack;
+  return blackCap;
+}
 
 export function AllProductsPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
+  const customTitle = searchParams.get("title") || "";
 
   const [openFilters, setOpenFilters] = useState<Record<string, boolean>>({});
   const [sortOrder, setSortOrder] = useState("Menor preço");
@@ -322,13 +332,13 @@ export function AllProductsPage() {
             <span className="hover:underline cursor-pointer" onClick={() => navigate("/")}>Página Inicial</span>
             <span className="mx-2">/</span>
             <span className="font-bold text-black">
-              {searchTerm ? `Resultados para "${searchTerm}"` : "Todos os nossos produtos"}
+              {customTitle || (searchTerm ? `Resultados para "${searchTerm}"` : "Todos os nossos produtos")}
             </span>
           </div>
 
           <div className="mb-4 md:mb-6 lg:mb-8">
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold font-jakarta mb-1 md:mb-2">
-              {searchTerm ? `Resultados para "${searchTerm}"` : "Todos os Nossos Produtos"}
+              {customTitle || (searchTerm ? `Resultados para "${searchTerm}"` : "Todos os Nossos Produtos")}
             </h1>
             <p className="text-xs sm:text-sm md:text-base font-jakarta text-gray-600">
               {searchTerm
@@ -392,7 +402,7 @@ export function AllProductsPage() {
                       >
                         <div className="bg-[#E8DDD4] aspect-[3/4] flex items-center justify-center p-3 sm:p-4 md:p-6 relative">
                           <img
-                            src={product.images[0]?.url || blackCap}
+                            src={product.images[0]?.url || getFallbackImage(product.name)}
                             alt={product.name}
                             className="w-full h-full object-contain"
                           />
