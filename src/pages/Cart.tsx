@@ -1,47 +1,84 @@
 import { Footer } from "../components/Footer";
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
+import { createOrder } from "../services/order-service";
 import blackCap from "../assets/black-cap.png";
 
 export function Cart() {
+  const { cart, loading, updateQuantity, removeItem } = useCart();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
   const [artVerification, setArtVerification] = useState(false);
   const [cep, setCep] = useState("");
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Boné Liso Preto",
-      color: "Preto",
-      size: "Único",
-      quantity: 2,
-      price: 33.90,
-      image: blackCap
-    },
-    {
-      id: 2,
-      name: "Boné Liso Preto",
-      color: "Azul",
-      size: "Único",
-      quantity: 1,
-      price: 33.90,
-      image: blackCap
-    }
-  ]);
+  const [creatingOrder, setCreatingOrder] = useState(false);
+  const [error, setError] = useState("");
 
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setCartItems(items =>
-      items.map(item =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
+  if (!isAuthenticated) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <div className="flex-1 flex flex-col items-center justify-center gap-4 bg-white">
+          <p className="font-jakarta text-gray-600 text-lg">Faça login para acessar seu carrinho</p>
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-black text-white px-8 py-3 rounded-lg font-jakarta font-medium hover:bg-gray-900 transition-colors"
+          >
+            Fazer Login
+          </button>
+        </div>
+        <Footer />
+      </div>
     );
-  };
+  }
 
-  const removeItem = (id: number) => {
-    setCartItems(items => items.filter(item => item.id !== id));
-  };
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <div className="flex-1 flex items-center justify-center bg-white">
+          <p className="font-jakarta text-gray-500">Carregando carrinho...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
-  const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  const cartItems = cart?.items ?? [];
+  const subtotal = cart?.total ?? 0;
   const artVerificationPrice = artVerification ? 20.00 : 0;
   const total = subtotal + artVerificationPrice;
+
+  const handleUpdateQuantity = async (cartItemId: number, newQuantity: number) => {
+    if (newQuantity < 1) return;
+    try {
+      await updateQuantity(cartItemId, newQuantity);
+    } catch {
+      setError("Erro ao atualizar quantidade.");
+    }
+  };
+
+  const handleRemoveItem = async (cartItemId: number) => {
+    try {
+      await removeItem(cartItemId);
+    } catch {
+      setError("Erro ao remover item.");
+    }
+  };
+
+  const handleCreateOrder = async () => {
+    if (!cart) return;
+    setCreatingOrder(true);
+    setError("");
+    try {
+      await createOrder(cart.id, artVerification ? 0 : undefined);
+      navigate("/minha-conta");
+    } catch {
+      setError("Erro ao criar pedido. Tente novamente.");
+    } finally {
+      setCreatingOrder(false);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -57,6 +94,12 @@ export function Cart() {
 
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-jakarta mb-3 md:mb-4">Carrinho</h1>
 
+          {error && (
+            <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-3 font-jakarta text-sm">
+              {error}
+            </div>
+          )}
+
           <div className="border border-gray-300 rounded-lg p-4 md:p-6 mb-3 md:mb-4">
             {cartItems.length === 0 ? (
               <p className="text-gray-500 font-jakarta">Seu carrinho está vazio</p>
@@ -65,17 +108,18 @@ export function Cart() {
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex flex-col md:flex-row gap-3 md:gap-4 pb-4 border-b border-gray-200 last:border-b-0 last:pb-0">
                     <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <img src={item.image} alt={item.name} className="w-16 h-16 md:w-20 md:h-20 object-contain" />
+                      <img src={blackCap} alt={item.productName} className="w-16 h-16 md:w-20 md:h-20 object-contain" />
                     </div>
                     <div className="flex-1 flex flex-col gap-2">
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
-                          <h3 className="font-jakarta font-medium text-black text-sm md:text-base">{item.name}</h3>
-                          <p className="text-xs md:text-sm font-jakarta text-gray-600">Cor: {item.color}</p>
-                          <p className="text-xs md:text-sm font-jakarta text-gray-600">Tamanho: {item.size}</p>
+                          <h3 className="font-jakarta font-medium text-black text-sm md:text-base">{item.productName}</h3>
+                          <p className="text-xs md:text-sm font-jakarta text-gray-600">
+                            R$ {item.unitPrice.toFixed(2).replace('.', ',')} /un
+                          </p>
                         </div>
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => handleRemoveItem(item.id)}
                           className="text-gray-400 hover:text-red-600 transition-colors md:hidden"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,24 +130,24 @@ export function Cart() {
                       <div className="flex items-center justify-between md:justify-start md:gap-4">
                         <div className="flex items-center gap-1 md:gap-2 border border-gray-300 rounded-lg">
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
                             className="px-2 md:px-3 py-1 font-jakarta font-medium text-sm hover:bg-gray-100"
                           >
                             -
                           </button>
                           <span className="px-2 font-jakarta text-sm">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
                             className="px-2 md:px-3 py-1 font-jakarta font-medium text-sm hover:bg-gray-100"
                           >
                             +
                           </button>
                         </div>
                         <p className="font-jakarta font-bold text-base md:text-lg">
-                          R$ {(item.price * item.quantity).toFixed(2).replace('.', ',')}
+                          R$ {item.subtotal.toFixed(2).replace('.', ',')}
                         </p>
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => handleRemoveItem(item.id)}
                           className="text-gray-400 hover:text-red-600 transition-colors hidden md:block"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,13 +205,23 @@ export function Cart() {
                   <span>Subtotal</span>
                   <span>R$ {subtotal.toFixed(2).replace('.', ',')}</span>
                 </div>
+                {artVerification && (
+                  <div className="flex justify-between font-jakarta text-sm md:text-base">
+                    <span>Verificação de arte</span>
+                    <span>R$ 20,00</span>
+                  </div>
+                )}
                 <div className="flex justify-between font-jakarta font-bold text-base md:text-lg">
-                  <span>Preço</span>
+                  <span>Total</span>
                   <span>R$ {total.toFixed(2).replace('.', ',')}</span>
                 </div>
               </div>
-              <button className="w-full bg-green-600 text-white py-2.5 md:py-3 text-sm md:text-base rounded-lg font-jakarta font-medium cursor-pointer hover:bg-green-700 transition-colors">
-                Continuar Compra
+              <button
+                onClick={handleCreateOrder}
+                disabled={cartItems.length === 0 || creatingOrder}
+                className="w-full bg-green-600 text-white py-2.5 md:py-3 text-sm md:text-base rounded-lg font-jakarta font-medium cursor-pointer hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {creatingOrder ? "Criando pedido..." : "Continuar Compra"}
               </button>
             </div>
           </div>
