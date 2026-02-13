@@ -6,14 +6,12 @@ import * as Accordion from "@radix-ui/react-accordion";
 import { getProductById } from "../services/product-service";
 import type { Product } from "../types/product";
 import { useCart } from "../contexts/CartContext";
-import { useAuth } from "../contexts/AuthContext";
 import blackCap from "../assets/black-cap.png";
 
 export function ProductDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { isAuthenticated } = useAuth();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);

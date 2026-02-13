@@ -22,6 +22,8 @@ export function Cart() {
 
   const [artVerification, setArtVerification] = useState(false);
   const [cep, setCep] = useState("");
+  const [shippingCalculated, setShippingCalculated] = useState(false);
+  const [isNordeste, setIsNordeste] = useState(false);
   const [creatingOrder, setCreatingOrder] = useState(false);
   const [error, setError] = useState("");
 
@@ -37,7 +39,34 @@ export function Cart() {
   }
 
   const artVerificationPrice = artVerification ? 20.00 : 0;
-  const finalTotal = total + artVerificationPrice;
+  const shippingCost = items.length > 0 && shippingCalculated ? (isNordeste ? 0 : 60.00) : 0;
+  const finalTotal = total + artVerificationPrice + shippingCost;
+
+  const handleCalculateShipping = () => {
+    const cleanCep = cep.replace(/\D/g, "");
+    if (cleanCep.length !== 8) {
+      setError("CEP inválido. Digite um CEP com 8 dígitos.");
+      return;
+    }
+    setError("");
+    const prefix = parseInt(cleanCep.substring(0, 2), 10);
+    const nordeste = prefix >= 40 && prefix <= 65;
+    setIsNordeste(nordeste);
+    setShippingCalculated(true);
+  };
+
+  const handleCepChange = (value: string) => {
+    const digits = value.replace(/\D/g, "").slice(0, 8);
+    let formatted = digits;
+    if (digits.length > 5) {
+      formatted = digits.slice(0, 5) + "-" + digits.slice(5);
+    }
+    setCep(formatted);
+    if (shippingCalculated) {
+      setShippingCalculated(false);
+      setIsNordeste(false);
+    }
+  };
 
   const handleUpdateQuantity = async (cartItemId: number, newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -181,15 +210,29 @@ export function Cart() {
               <div className="flex gap-2 md:gap-3">
                 <input
                   type="text"
-                  placeholder="CEP"
+                  placeholder="00000-000"
                   value={cep}
-                  onChange={(e) => setCep(e.target.value)}
+                  onChange={(e) => handleCepChange(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleCalculateShipping()}
                   className="flex-1 px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:border-black font-jakarta"
                 />
-                <button className="bg-black text-white px-4 md:px-8 py-2 md:py-3 text-sm md:text-base rounded-lg font-jakarta font-medium cursor-pointer">
-                  Simular
+                <button
+                  onClick={handleCalculateShipping}
+                  className="bg-black text-white px-4 md:px-8 py-2 md:py-3 text-sm md:text-base rounded-lg font-jakarta font-medium cursor-pointer hover:bg-gray-800 transition-colors"
+                >
+                  Calcular
                 </button>
               </div>
+              {shippingCalculated && (
+                <div className="mt-3 flex justify-between items-center">
+                  <span className="font-jakarta text-sm md:text-base text-gray-600">
+                    {isNordeste ? "Região Nordeste" : "Demais regiões"}
+                  </span>
+                  <span className={`font-jakarta font-bold text-sm md:text-base ${isNordeste ? "text-green-600" : ""}`}>
+                    {isNordeste ? "Grátis" : "R$ 60,00"}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="border border-gray-300 rounded-lg p-4 md:p-6">
@@ -203,6 +246,14 @@ export function Cart() {
                   <div className="flex justify-between font-jakarta text-sm md:text-base">
                     <span>Verificação de arte</span>
                     <span>R$ 20,00</span>
+                  </div>
+                )}
+                {shippingCalculated && (
+                  <div className="flex justify-between font-jakarta text-sm md:text-base">
+                    <span>Frete</span>
+                    <span className={isNordeste ? "text-green-600" : ""}>
+                      {isNordeste ? "Grátis" : "R$ 60,00"}
+                    </span>
                   </div>
                 )}
                 <div className="flex justify-between font-jakarta font-bold text-base md:text-lg">
