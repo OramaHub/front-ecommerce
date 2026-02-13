@@ -6,6 +6,8 @@ import { CreateAccountPage } from "./pages/CreateAccountPage";
 import { AllProductsPage } from "./pages/AllProductsPage";
 import { ProductDetailsPage } from "./pages/ProductDetailsPage";
 import { MyAccountPage } from "./pages/MyAccountPage";
+import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { Layout } from "./components/Layout";
 
 export function RoutesWrapper(){
@@ -20,6 +22,8 @@ export function RoutesWrapper(){
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/cadastro" element={<CreateAccountPage />} />
                     <Route path="/minha-conta" element={<MyAccountPage />} />
+                    <Route path="/recuperar-senha" element={<ForgotPasswordPage />} />
+                    <Route path="/redefinir-senha" element={<ResetPasswordPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>
