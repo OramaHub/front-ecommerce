@@ -2,6 +2,8 @@ import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import { Footer } from "../components/Footer";
+import { maskCPF, maskPhone, unmask } from "../utils/masks";
+import { validateCPF, validatePhone, validatePassword, validateName } from "../utils/validators";
 
 export function CreateAccountPage() {
   const navigate = useNavigate();
@@ -14,25 +16,52 @@ export function CreateAccountPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  function validate(): boolean {
+    const errors: Record<string, string> = {};
+
+    if (!validateName(name)) {
+      errors.name = "Nome deve ter no mínimo 3 caracteres.";
+    }
+    if (!validateCPF(cpf)) {
+      errors.cpf = "CPF inválido.";
+    }
+    if (!validatePhone(phone)) {
+      errors.phone = "Telefone deve ter 10 ou 11 dígitos.";
+    }
+    if (!validatePassword(password)) {
+      errors.password = "Senha deve ter no mínimo 6 caracteres.";
+    }
+    if (password !== confirmPassword) {
+      errors.confirmPassword = "As senhas não coincidem.";
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
 
-    if (password !== confirmPassword) {
-      setError("As senhas não coincidem.");
-      return;
-    }
+    if (!validate()) return;
 
     setIsLoading(true);
 
     try {
-      await register({ name, email, password, cpf, phone });
+      await register({
+        name,
+        email,
+        password,
+        cpf: unmask(cpf),
+        phone: unmask(phone),
+      });
       navigate("/login");
     } catch (err: any) {
-      console.error("Erro no registro:", err);
-      const message = err.response?.data?.message || err.message || "Erro ao criar conta. Tente novamente.";
+      const data = err.response?.data;
+      const message = data?.errorMessage || data?.message || "Erro ao criar conta. Tente novamente.";
       setError(message);
     } finally {
       setIsLoading(false);
@@ -72,8 +101,9 @@ export function CreateAccountPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black font-jakarta"
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none font-jakarta ${fieldErrors.name ? "border-red-400 focus:border-red-500" : "border-gray-300 focus:border-black"}`}
                 />
+                {fieldErrors.name && <p className="text-red-500 text-xs mt-1 ml-3 font-jakarta">{fieldErrors.name}</p>}
               </div>
 
               <div>
@@ -83,12 +113,14 @@ export function CreateAccountPage() {
                 <input
                   type="text"
                   id="cpf"
-                  placeholder="***.***.***-**"
+                  placeholder="000.000.000-00"
                   value={cpf}
-                  onChange={(e) => setCpf(e.target.value)}
+                  onChange={(e) => setCpf(maskCPF(e.target.value))}
+                  maxLength={14}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black font-jakarta"
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none font-jakarta ${fieldErrors.cpf ? "border-red-400 focus:border-red-500" : "border-gray-300 focus:border-black"}`}
                 />
+                {fieldErrors.cpf && <p className="text-red-500 text-xs mt-1 ml-3 font-jakarta">{fieldErrors.cpf}</p>}
               </div>
 
               <div>
@@ -115,10 +147,12 @@ export function CreateAccountPage() {
                   id="telefone"
                   placeholder="(00) 00000-0000"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setPhone(maskPhone(e.target.value))}
+                  maxLength={15}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black font-jakarta"
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none font-jakarta ${fieldErrors.phone ? "border-red-400 focus:border-red-500" : "border-gray-300 focus:border-black"}`}
                 />
+                {fieldErrors.phone && <p className="text-red-500 text-xs mt-1 ml-3 font-jakarta">{fieldErrors.phone}</p>}
               </div>
 
               <div>
@@ -132,8 +166,9 @@ export function CreateAccountPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black font-jakarta"
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none font-jakarta ${fieldErrors.password ? "border-red-400 focus:border-red-500" : "border-gray-300 focus:border-black"}`}
                 />
+                {fieldErrors.password && <p className="text-red-500 text-xs mt-1 ml-3 font-jakarta">{fieldErrors.password}</p>}
               </div>
 
               <div>
@@ -147,8 +182,9 @@ export function CreateAccountPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black font-jakarta"
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none font-jakarta ${fieldErrors.confirmPassword ? "border-red-400 focus:border-red-500" : "border-gray-300 focus:border-black"}`}
                 />
+                {fieldErrors.confirmPassword && <p className="text-red-500 text-xs mt-1 ml-3 font-jakarta">{fieldErrors.confirmPassword}</p>}
               </div>
             </div>
 
