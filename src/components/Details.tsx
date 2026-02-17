@@ -8,7 +8,7 @@ export function Details() {
   ];
 
   return (
-    <section className="bg-white pt-8 md:pt-10 lg:pt-12 pb-0">
+    <section className="bg-white pt-8 md:pt-10 lg:pt-12 pb-0" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       <div className="max-w-[1400px] mx-auto px-4 md:px-0 flex flex-col md:flex-row justify-center items-center gap-y-4 md:gap-y-0 md:gap-x-14">
         {details.map((item, index) => (
           <>

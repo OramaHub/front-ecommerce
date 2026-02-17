@@ -27,7 +27,7 @@ export function CatalogPreview() {
   return (
     <section className="bg-black py-8 md:py-12 lg:py-16">
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16">
-        <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-6 md:mb-9 lg:mb-12 font-jakarta">UM POUCO DO NOSSO CATÁLOGO</h2>
+        <h2 className="text-white text-2xl md:text-4xl font-extrabold tracking-tight mb-6 md:mb-9 lg:mb-12" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>UM POUCO DO NOSSO CATÁLOGO</h2>
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
@@ -52,9 +52,9 @@ export function CatalogPreview() {
         <div className="flex justify-center">
           <a
             href="/produtos"
-            className="bg-white text-black px-6 md:px-8 py-2 text-sm rounded-full font-jakarta font-medium hover:bg-black hover:text-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl border-2 border-white"
+            className="inline-block bg-white text-black px-20 py-2.5 text-sm rounded-full font-jakarta font-semibold uppercase tracking-wide"
           >
-            Conheça todo o nosso catálogo
+            Ver Todos
           </a>
         </div>
       </div>

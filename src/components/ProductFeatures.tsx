@@ -12,7 +12,7 @@ export function ProductFeatures() {
 
           <div className="flex-1 flex justify-center w-full">
             <div className="text-center lg:text-left">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold font-jakarta">
+              <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 NAVEGUE PELO NOSSO CATÁLOGO
               </h2>
               <p className="text-base md:text-lg mb-6 font-jakarta text-black leading-snug">
@@ -22,9 +22,9 @@ export function ProductFeatures() {
               </p>
               <a
                 href="/produtos"
-                className="inline-block bg-black text-white px-8 md:px-10 lg:px-12 py-2.5 md:py-3 text-sm md:text-base rounded-full font-jakarta font-medium"
+                className="inline-block bg-black text-white px-20 py-2.5 text-sm rounded-full font-jakarta font-semibold uppercase tracking-wide"
               >
-                Explore o catálogo de Produtos
+                Ver Catálogo
               </a>
             </div>
           </div>
@@ -33,7 +33,7 @@ export function ProductFeatures() {
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-12 lg:gap-16 mt-8 md:mt-0 lg:-mt-16">
           <div className="flex-1 flex justify-center w-full order-2 lg:order-1">
             <div className="text-center lg:text-left">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold font-jakarta text-blue-600">
+              <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight text-blue-600" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 PERSONALIZE SEU PRODUTO
               </h2>
               <p className="text-base md:text-lg mb-6 font-jakarta text-black leading-snug">
@@ -45,9 +45,9 @@ export function ProductFeatures() {
               </p>
               <a
                 href="/personalizacao"
-                className="inline-block bg-blue-600 text-white px-8 md:px-10 lg:px-12 py-2.5 md:py-3 text-sm md:text-base rounded-full font-jakarta font-medium"
+                className="inline-block bg-blue-600 text-white px-20 py-2.5 text-sm rounded-full font-jakarta font-semibold uppercase tracking-wide"
               >
-                QUERO PERSONALIZAR MEU PRODUTO
+                Personalizar
               </a>
             </div>
           </div>

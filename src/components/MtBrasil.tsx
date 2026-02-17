@@ -20,12 +20,12 @@ const images = [mt01, mt02, mt03, mt04, mt05, mt06, mt07, mt08, mt09, mt10, mt11
 
 export function MtBrasil() {
   return (
-    <section className="bg-white py-8 md:py-12 lg:py-16">
+    <section className="bg-white pb-8 md:pb-12 lg:pb-16">
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16 mb-8 md:mb-10">
         <div className="text-center">
           <h2
-            className="tracking-wide text-[24px] sm:text-[30px] md:text-[36px] lg:text-[40px]"
-            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800 }}
+            className="text-2xl md:text-4xl font-extrabold tracking-tight"
+            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
           >
             MT PELO BRASIL
           </h2>
@@ -68,8 +68,8 @@ export function MtBrasil() {
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16 mt-10 md:mt-14">
         <div className="text-center max-w-5xl mx-auto">
           <h3
-            className="tracking-wide mb-4 text-[20px] sm:text-[26px] md:text-[32px] lg:text-[40px]"
-            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700 }}
+            className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4"
+            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
           >
             A QUALIDADE QUE SUA MARCA MERECE
           </h3>

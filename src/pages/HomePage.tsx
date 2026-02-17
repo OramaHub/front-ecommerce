@@ -4,6 +4,7 @@ import { CatalogPreview } from "../components/CatalogPreview";
 import { Details } from "../components/Details";
 import { ProductFeatures } from "../components/ProductFeatures";
 import { MtBrasil } from "../components/MtBrasil";
+import { Faq } from "../components/Faq";
 import { Footer } from "../components/Footer";
 
 export function HomePage(){
@@ -15,6 +16,7 @@ export function HomePage(){
             <Details />
             <ProductFeatures />
             <MtBrasil />
+            <Faq />
             <Footer />
         </div>
     )

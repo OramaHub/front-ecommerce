@@ -20,6 +20,38 @@ function getFallbackImage(productName: string) {
   return blackCap;
 }
 
+const topBarMessages = [
+  "Frete grátis para todo o Nordeste",
+  "Parcele em até 4x sem juros",
+  "Compra 100% segura",
+  "Personalização sob medida para sua marca",
+];
+
+function TopBarCarousel() {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % topBarMessages.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="w-full bg-white border-t border-gray-200 overflow-hidden">
+      <div className="max-w-[1600px] mx-auto flex items-center justify-center py-2">
+        <span
+          key={current}
+          className="text-black text-sm animate-fade-in"
+          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 400 }}
+        >
+          {topBarMessages[current]}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -213,6 +245,8 @@ export function Header() {
             <AppNavigationMenu />
         </div>
       </nav>
+
+      <TopBarCarousel />
 
       {isMenuOpen && (
         <>
