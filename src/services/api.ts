@@ -33,7 +33,9 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const isAuthRequest = originalRequest.url?.includes("/api/auth/");
+
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
       const refreshToken = localStorage.getItem("refreshToken");
 
       if (!refreshToken) {
