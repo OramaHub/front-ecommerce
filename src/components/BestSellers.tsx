@@ -26,7 +26,7 @@ export function BestSellers() {
 
   return (
     <section className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16 py-8 md:py-10 lg:py-12">
-      <h2 className="text-2xl md:text-3xl font-bold mb-3 font-jakarta">MAIS VENDIDOS</h2>
+      <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-3" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>MAIS VENDIDOS</h2>
 
       {loading ? (
         <p className="font-jakarta text-gray-500">Carregando produtos...</p>
