@@ -52,7 +52,7 @@ export function CatalogPreview() {
         <div className="flex justify-center">
           <a
             href="/produtos"
-            className="bg-white text-black px-8 md:px-10 lg:px-12 py-2.5 md:py-3 text-sm md:text-base rounded-full font-jakarta font-medium hover:bg-black hover:text-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl border-2 border-white"
+            className="bg-white text-black px-6 md:px-8 py-2 text-sm rounded-full font-jakarta font-medium hover:bg-black hover:text-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl border-2 border-white"
           >
             Conheça todo o nosso catálogo
           </a>

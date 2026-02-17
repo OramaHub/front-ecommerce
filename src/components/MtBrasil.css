@@ -1,0 +1,19 @@
+.mt-brasil-slider .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
+
+.mt-brasil-slider .swiper-slide {
+  width: 180px !important;
+}
+
+@media (min-width: 640px) {
+  .mt-brasil-slider .swiper-slide {
+    width: 210px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mt-brasil-slider .swiper-slide {
+    width: 248px !important;
+  }
+}
