@@ -7,7 +7,7 @@ import { validateCPF, validatePhone, validatePassword, validateName } from "../u
 
 export function CreateAccountPage() {
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register, login } = useAuth();
 
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
@@ -58,7 +58,8 @@ export function CreateAccountPage() {
         cpf: unmask(cpf),
         phone: unmask(phone),
       });
-      navigate("/login");
+      await login(email, password);
+      navigate("/");
     } catch (err: any) {
       const data = err.response?.data;
       const message = data?.errorMessage || data?.message || "Erro ao criar conta. Tente novamente.";
