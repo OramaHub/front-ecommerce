@@ -3,6 +3,7 @@ import { BestSellers } from "../components/BestSellers";
 import { CatalogPreview } from "../components/CatalogPreview";
 import { Details } from "../components/Details";
 import { ProductFeatures } from "../components/ProductFeatures";
+import { MtBrasil } from "../components/MtBrasil";
 import { Footer } from "../components/Footer";
 
 export function HomePage(){
@@ -13,6 +14,7 @@ export function HomePage(){
             <CatalogPreview />
             <Details />
             <ProductFeatures />
+            <MtBrasil />
             <Footer />
         </div>
     )
