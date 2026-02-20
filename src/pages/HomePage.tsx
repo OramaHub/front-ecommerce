@@ -1,5 +1,6 @@
 import { HeroSlider } from "../components/HeroSlider";
 import { BestSellers } from "../components/BestSellers";
+import { DestinationsSection } from "../components/DestinationsSection";
 import { CatalogPreview } from "../components/CatalogPreview";
 import { Details } from "../components/Details";
 import { ProductFeatures } from "../components/ProductFeatures";
@@ -12,6 +13,7 @@ export function HomePage(){
         <div>
             <HeroSlider />
             <BestSellers />
+            <DestinationsSection />
             <CatalogPreview />
             <Details />
             <ProductFeatures />

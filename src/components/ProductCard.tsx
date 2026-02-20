@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { Heart } from "lucide-react";
+import { formatPrice } from "../utils/format";
 
 interface ProductCardProps {
   id: number;
@@ -50,7 +51,7 @@ export function ProductCard({ id, title, image, price }: ProductCardProps) {
           </p>
           {price !== undefined && (
             <p className="text-[1.25rem] font-light -mt-[0.375rem]">
-              R$ {price.toFixed(2).replace(".", ",")}
+              {formatPrice(price)}
             </p>
           )}
         </div>
@@ -59,7 +60,7 @@ export function ProductCard({ id, title, image, price }: ProductCardProps) {
       <div className="flex h-[5rem] items-center justify-between bg-white px-[1.25rem]">
         <button
           onClick={() => navigate(`/produto/${id}`)}
-          className="font-jakarta h-[2.4375rem] w-[11.5625rem] cursor-pointer rounded-full border-0 bg-[#005CE6] text-[0.75rem] font-normal tracking-[0.08em] text-white transition-all duration-200 hover:bg-[#0047B3] hover:scale-110"
+          className="font-jakarta h-[2.4375rem] w-[11.5625rem] cursor-pointer rounded-full border-0 bg-black text-[0.75rem] font-normal tracking-[0.05em] text-white transition-all duration-200 hover:bg-neutral-800 hover:scale-110"
         >
           CONHECER MODELO
         </button>

@@ -5,9 +5,11 @@ import type { Product } from "../types/product";
 import blackCap from "../assets/black-cap.png";
 import truckerBlack from "../assets/trucker-black.png";
 import tShortBlack from "../assets/t-short-black.png";
+import americano from "../assets/Americano.png";
 
 function getFallbackImage(productName: string) {
   const name = productName.toLowerCase();
+  if (name.includes("americano")) return americano;
   if (name.includes("trucker")) return truckerBlack;
   if (name.includes("camiseta") || name.includes("camisa")) return tShortBlack;
   return blackCap;
