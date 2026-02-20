@@ -11,8 +11,21 @@ const getDistance = (index: number, activeIndex: number, total: number): number 
   return raw > Math.floor(total / 2) ? raw - total : raw;
 };
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+
+  return isMobile;
+}
+
 export function DestinationsCarousel({ caps }: DestinationsCarouselProps) {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [activeIndex, setActiveIndex] = useState(0);
   const [textVisible, setTextVisible] = useState(true);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -32,11 +45,15 @@ export function DestinationsCarousel({ caps }: DestinationsCarouselProps) {
 
   const activeCap = caps[activeIndex];
 
+  const activeWidth = isMobile ? "45%" : "22%";
+  const adjacentWidth = isMobile ? "15%" : "12%";
+  const capMargin = isMobile ? "0.75rem" : "2.5rem";
+
   return (
     <div>
       <div
         className="flex items-center justify-center px-4"
-        style={{ height: "clamp(200px, 28vw, 400px)" }}
+        style={{ height: "clamp(200px, 40vw, 400px)" }}
       >
         {caps.map((cap, index) => {
           const distance = getDistance(index, activeIndex, caps.length);
@@ -50,10 +67,10 @@ export function DestinationsCarousel({ caps }: DestinationsCarouselProps) {
               onClick={() => isAdjacent && handleSelect(index)}
               style={{
                 height: "100%",
-                width: isActive ? "22%" : isAdjacent ? "12%" : "0%",
+                width: isActive ? activeWidth : isAdjacent ? adjacentWidth : "0%",
                 opacity: isActive ? 1 : isAdjacent ? 0.35 : 0,
-                marginLeft: isVisible ? "2.5rem" : "0",
-                marginRight: isVisible ? "2.5rem" : "0",
+                marginLeft: isVisible ? capMargin : "0",
+                marginRight: isVisible ? capMargin : "0",
                 overflow: "hidden",
                 flexShrink: 0,
                 transition: "width 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease, margin 0.6s ease",
@@ -71,16 +88,16 @@ export function DestinationsCarousel({ caps }: DestinationsCarouselProps) {
       </div>
 
       <div
-        className="px-16 mt-10 flex flex-col items-center text-center"
+        className="px-4 md:px-16 mt-6 md:mt-10 flex flex-col items-center text-center"
         style={{
           opacity: textVisible ? 1 : 0,
           transition: "opacity 0.3s ease",
         }}
       >
-        <p className="font-jakarta font-bold text-[1rem] mb-1">
+        <p className="font-jakarta font-bold text-[0.875rem] md:text-[1rem] mb-1">
           {activeCap.tagline}
         </p>
-        <p className="font-jakarta font-light text-[1rem] max-w-xl leading-tight tracking-[-0.02em] mb-6">
+        <p className="font-jakarta font-light text-[0.875rem] md:text-[1rem] max-w-xl leading-tight tracking-[-0.02em] mb-6">
           {activeCap.description}
         </p>
         <button
