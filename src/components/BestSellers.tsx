@@ -18,26 +18,36 @@ export function BestSellers() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getProducts(0, 3, "price,asc")
+    getProducts(0, 4, "price,asc")
       .then((data) => setProducts(data.content))
       .catch(() => setProducts([]))
       .finally(() => setLoading(false));
   }, []);
 
   return (
-    <section className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16 py-8 md:py-10 lg:py-12">
-      <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-3" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>MAIS VENDIDOS</h2>
+    <section className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16 py-8 md:py-10 lg:py-12 mb-[clamp(2.5rem,5vw,6.25rem)]">
+      <div className="flex justify-center gap-6">
+        {["Mais vendidos", "Menor valor", "Lançamentos"].map((filtro) => (
+          <span
+            key={filtro}
+            className="font-jakarta text-xs font-semibold uppercase cursor-pointer transition-transform duration-200 hover:scale-110 inline-block"
+          >
+            {filtro}
+          </span>
+        ))}
+      </div>
 
       {loading ? (
         <p className="font-jakarta text-gray-500">Carregando produtos...</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-[1.875rem] mt-[1.625rem]">
           {products.map((product) => (
             <ProductCard
               key={product.id}
               id={product.id}
               title={product.name}
               image={product.images[0]?.url || getFallbackImage(product.name)}
+              price={product.price}
             />
           ))}
         </div>
