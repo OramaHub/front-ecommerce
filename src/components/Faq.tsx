@@ -43,7 +43,7 @@ const faqItems = [
 export function Faq() {
   return (
     <section
-      className="w-full bg-white py-16 md:py-24"
+      className="w-full bg-white py-12 md:py-16 lg:py-24"
       style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
     >
       <div className="max-w-[1600px] mx-auto px-4 md:px-20">

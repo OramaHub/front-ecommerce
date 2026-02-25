@@ -4,7 +4,7 @@ import tsPerso from "../assets/tsperso.png";
 export function ProductFeatures() {
   return (
     <section className="bg-white">
-      <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16 py-8 md:py-12 lg:py-16">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16 py-12 md:py-16 lg:py-24">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-12 lg:gap-16">
           <div className="flex-1 flex justify-center w-full">
             <img src={tsCap} alt="Boné e Camiseta" className="w-full h-auto max-w-[500px] md:max-w-[600px] lg:max-w-[700px] hover:scale-[1.02] transition-transform duration-300" />

@@ -60,7 +60,7 @@ export function ProductCard({ id, title, image, price }: ProductCardProps) {
       <div className="flex h-[3.5rem] md:h-[5rem] items-center justify-between bg-white px-2 md:px-[1.25rem] gap-2">
         <button
           onClick={() => navigate(`/produto/${id}`)}
-          className="font-jakarta h-[1.875rem] md:h-[2.4375rem] flex-1 md:flex-none md:w-[11.5625rem] cursor-pointer rounded-full border-0 bg-black text-[0.6rem] md:text-[0.75rem] font-normal tracking-[0.05em] text-white transition-all duration-200 hover:bg-neutral-800 hover:scale-110"
+          className="font-jakarta h-[1.875rem] md:h-[2.4375rem] flex-1 md:flex-none md:w-[11.5625rem] cursor-pointer rounded-full border-0 bg-black text-[0.55rem] md:text-[0.75rem] font-normal tracking-[0.05em] text-white transition-all duration-200 hover:bg-neutral-800 hover:scale-110"
         >
           CONHECER MODELO
         </button>

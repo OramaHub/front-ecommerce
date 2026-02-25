@@ -25,7 +25,7 @@ export function CatalogPreview() {
   }, []);
 
   return (
-    <section className="bg-black py-8 md:py-12 lg:py-16">
+    <section className="bg-black py-12 md:py-16 lg:py-24">
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16">
         <h2 className="text-white text-2xl md:text-4xl font-extrabold tracking-tight mb-6 md:mb-9 lg:mb-12" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>UM POUCO DO NOSSO CATÁLOGO</h2>
 

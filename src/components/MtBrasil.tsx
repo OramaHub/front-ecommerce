@@ -20,7 +20,7 @@ const images = [mt01, mt02, mt03, mt04, mt05, mt06, mt07, mt08, mt09, mt10, mt11
 
 export function MtBrasil() {
   return (
-    <section className="bg-white pb-8 md:pb-12 lg:pb-16">
+    <section className="bg-white pb-12 md:pb-16 lg:pb-24">
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16 mb-8 md:mb-10">
         <div className="text-center">
           <h2

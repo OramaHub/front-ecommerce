@@ -1,4 +1,5 @@
 import { HeroSlider } from "../components/HeroSlider";
+import { PremiumProcess } from "../components/PremiumProcess";
 import { BestSellers } from "../components/BestSellers";
 import { DestinationsSection } from "../components/DestinationsSection";
 import { CatalogPreview } from "../components/CatalogPreview";
@@ -13,6 +14,7 @@ export function HomePage(){
         <div>
             <HeroSlider />
             <BestSellers />
+            <PremiumProcess />
             <DestinationsSection />
             <CatalogPreview />
             <Details />

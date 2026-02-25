@@ -39,7 +39,7 @@ export function DestinationsSection() {
   const isCarousel = phase === "carousel";
 
   return (
-    <section ref={sectionRef} className="w-full overflow-hidden" style={{ paddingTop: "clamp(2rem, 4vw, 4rem)", paddingBottom: "clamp(4rem, 8vw, 8rem)" }}>
+    <section ref={sectionRef} className="w-full overflow-hidden py-12 md:py-16 lg:py-24">
       <div className="relative">
         <div
           className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4"
