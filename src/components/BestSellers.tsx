@@ -20,7 +20,7 @@ export function BestSellers() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getProducts(0, 3, "price,asc")
+    getProducts(0, 4, "price,asc")
       .then((data) => setProducts(data.content))
       .catch(() => setProducts([]))
       .finally(() => setLoading(false));
@@ -45,10 +45,14 @@ export function BestSellers() {
         <div className="grid grid-cols-2 lg:grid-cols-[repeat(3,minmax(0,370px))] lg:justify-center gap-3 md:gap-[1.875rem] mt-[1.625rem]">
           {products.map((product, index) => {
             const isLastOdd = products.length % 2 !== 0 && index === products.length - 1;
+            const isHiddenOnDesktop = index === 3;
             return (
               <div
                 key={product.id}
-                className={isLastOdd ? "col-span-2 justify-self-center w-[calc(50%-0.375rem)] lg:col-span-1 lg:w-full" : ""}
+                className={[
+                  isLastOdd ? "col-span-2 justify-self-center w-[calc(50%-0.375rem)] lg:col-span-1 lg:w-full" : "",
+                  isHiddenOnDesktop ? "lg:hidden" : "",
+                ].filter(Boolean).join(" ")}
               >
                 <ProductCard
                   id={product.id}

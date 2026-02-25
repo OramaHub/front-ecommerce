@@ -22,11 +22,11 @@ export function PremiumProcess() {
       </div>
 
       <div className="flex flex-col lg:ml-[2.5rem] lg:h-[54rem]">
-        <h2 className="font-jakarta font-bold text-[2rem] md:text-[2.5rem] lg:text-[3rem] leading-[0.89] tracking-[0] text-black">
-          COMO<br />
-          PRODUZIMOS O<br />
-          MODELO<br />
-          PREMIUM
+        <h2 className="font-jakarta font-bold text-[2rem] md:text-[2.5rem] lg:text-[3rem] leading-[0.89] tracking-[0] text-black text-center lg:text-left">
+          COMO<br className="hidden lg:block" />
+          {" "}PRODUZIMOS O<br className="hidden lg:block" />
+          {" "}MODELO<br className="hidden lg:block" />
+          {" "}PREMIUM
         </h2>
 
         <h3 className="font-jakarta font-semibold text-[1rem] md:text-[1.2rem] lg:text-[1.375rem] leading-[0.85] tracking-[0] text-black mt-[2rem] lg:mt-auto">
