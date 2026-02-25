@@ -1,11 +1,8 @@
+import { StudioSection } from "../components/StudioSection";
 import { HeroSlider } from "../components/HeroSlider";
 import { PremiumProcess } from "../components/PremiumProcess";
 import { BestSellers } from "../components/BestSellers";
 import { DestinationsSection } from "../components/DestinationsSection";
-import { CatalogPreview } from "../components/CatalogPreview";
-import { Details } from "../components/Details";
-import { ProductFeatures } from "../components/ProductFeatures";
-import { MtBrasil } from "../components/MtBrasil";
 import { Faq } from "../components/Faq";
 import { Footer } from "../components/Footer";
 
@@ -15,11 +12,8 @@ export function HomePage(){
             <HeroSlider />
             <BestSellers />
             <PremiumProcess />
+            <StudioSection />
             <DestinationsSection />
-            <CatalogPreview />
-            <Details />
-            <ProductFeatures />
-            <MtBrasil />
             <Faq />
             <Footer />
         </div>

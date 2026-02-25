@@ -19,7 +19,7 @@ export function DestinationsSection() {
           observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.55 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
@@ -39,7 +39,7 @@ export function DestinationsSection() {
   const isCarousel = phase === "carousel";
 
   return (
-    <section ref={sectionRef} className="w-full overflow-hidden py-12 md:py-16 lg:py-24">
+    <section ref={sectionRef} className="w-full overflow-hidden py-16 md:py-20 lg:py-28">
       <div className="relative">
         <div
           className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4"
