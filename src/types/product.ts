@@ -12,13 +12,19 @@ export interface Product {
   images: ProductImage[]
 }
 
-export interface PageResponse<T> {
-  content: T[]
-  totalPages: number
-  totalElements: number
-  number: number
-  size: number
-  first: boolean
-  last: boolean
-  empty: boolean
+export interface AdminProduct extends Product {
+  active: boolean
+}
+
+export interface CreateProductRequest {
+  name: string
+  description: string
+  price: number
+  stock: number
+}
+
+export interface UpdateProductRequest {
+  name: string
+  description: string
+  price: number
 }

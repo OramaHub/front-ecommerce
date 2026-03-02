@@ -1,3 +1,12 @@
+export type OrderStatus =
+  | "PENDING"
+  | "PAYMENT_CONFIRMED"
+  | "PROCESSING"
+  | "SHIPPED"
+  | "DELIVERED"
+  | "CANCELLED"
+  | "REFUNDED"
+
 export interface OrderItem {
   productId: number
   productName: string
@@ -10,6 +19,7 @@ export interface Order {
   id: number
   orderNumber: string
   orderDate: string
+  status: OrderStatus
   subtotal: number
   discount: number
   total: number
