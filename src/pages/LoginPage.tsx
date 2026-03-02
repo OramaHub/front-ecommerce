@@ -1,11 +1,13 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import { Footer } from "../components/Footer";
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+  const from = (location.state as { from?: string })?.from ?? "/";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +21,7 @@ export function LoginPage() {
 
     try {
       await login(email, password);
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (err: any) {
       const message = err.response?.data?.message || "Email ou senha inválidos.";
       setError(message);
