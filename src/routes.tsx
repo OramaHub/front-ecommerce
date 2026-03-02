@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { HomePage } from "./pages/HomePage";
 import { Cart } from "./pages/Cart";
 import { LoginPage } from "./pages/LoginPage";
@@ -13,7 +13,6 @@ import { AdminRoute } from "./components/AdminRoute";
 import { AdminLayout } from "./components/admin/AdminLayout";
 import { AdminDashboardPage } from "./pages/admin/AdminDashboardPage";
 import { AdminProductsPage } from "./pages/admin/AdminProductsPage";
-import { AdminOrdersPage } from "./pages/admin/AdminOrdersPage";
 import { AdminClientsPage } from "./pages/admin/AdminClientsPage";
 
 export function RoutesWrapper() {
@@ -36,7 +35,7 @@ export function RoutesWrapper() {
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="/admin/produtos" element={<AdminProductsPage />} />
-            <Route path="/admin/pedidos" element={<AdminOrdersPage />} />
+            <Route path="/admin/pedidos" element={<Navigate to="/admin" replace />} />
             <Route path="/admin/clientes" element={<AdminClientsPage />} />
           </Route>
         </Route>
