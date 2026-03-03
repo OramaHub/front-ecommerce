@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { Footer } from "../components/Footer";
 import { useAuth } from "../contexts/AuthContext";
 import { getClient, updateClient, changePassword } from "../services/client-service";
@@ -11,8 +11,17 @@ import type { Order } from "../types/order";
 export function MyAccountPage() {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [activeSection, setActiveSection] = useState<"perfil" | "senha" | "enderecos" | "pedidos">("perfil");
+  const tabParam = searchParams.get("tab");
+  const initialSection = (
+    tabParam === "enderecos" ? "enderecos" :
+    tabParam === "pedidos" ? "pedidos" :
+    tabParam === "dados" ? "perfil" :
+    "perfil"
+  ) as "perfil" | "senha" | "enderecos" | "pedidos";
+
+  const [activeSection, setActiveSection] = useState<"perfil" | "senha" | "enderecos" | "pedidos">(initialSection);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
