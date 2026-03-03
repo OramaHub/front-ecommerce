@@ -59,11 +59,22 @@ export function Header() {
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const userMenuTimeout = useRef<ReturnType<typeof setTimeout>>(null);
   const { user, isAuthenticated, logout } = useAuth();
   const { itemCount } = useCart();
   const navigate = useNavigate();
+
+  const handleUserMenuEnter = () => {
+    if (userMenuTimeout.current) clearTimeout(userMenuTimeout.current);
+    setShowUserMenu(true);
+  };
+
+  const handleUserMenuLeave = () => {
+    userMenuTimeout.current = setTimeout(() => setShowUserMenu(false), 150);
+  };
 
   const handleSearch = (term: string) => {
     const trimmed = term.trim();
@@ -208,13 +219,13 @@ export function Header() {
           <div className="flex items-center pr-4 md:pr-8 lg:pr-24 ml-auto lg:ml-0">
             <div className="hidden lg:flex items-center lg:ml-[5.625rem]">
               <button className="flex items-center">
-                <img src={headsetIcon} alt="Atendimento" className="h-5.5" />
+                <img src={headsetIcon} alt="Atendimento" className="h-5.5 transition-transform duration-200 hover:scale-110" />
                 <span className="ml-[1.6rem] text-[1rem] font-jakarta font-normal">Central de atendimento</span>
               </button>
             </div>
 
             <NavLink to="/carrinho" className="ml-4 lg:ml-[2.3125rem] relative">
-              <img src={cartIcon} alt="Carrinho" className="h-5 lg:h-5.5" />
+              <img src={cartIcon} alt="Carrinho" className="h-5 lg:h-5.5 transition-transform duration-200 hover:scale-110" />
               {itemCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center font-jakarta">
                   {itemCount > 99 ? "99+" : itemCount}
@@ -223,17 +234,65 @@ export function Header() {
             </NavLink>
 
             {isAuthenticated ? (
-              <div className="hidden lg:flex items-center ml-[1.875rem] gap-2">
-                <NavLink to="/minha-conta" className="text-sm font-jakarta font-medium text-black truncate max-w-[120px]">
-                  {user?.name?.split(" ")[0]}
-                </NavLink>
-                <button onClick={logout} className="text-sm font-jakarta text-black/60 hover:text-black transition-colors">
-                  Sair
+              <div
+                className="hidden lg:flex items-center relative ml-[1.875rem]"
+                onMouseEnter={handleUserMenuEnter}
+                onMouseLeave={handleUserMenuLeave}
+              >
+                <button className="flex items-center justify-center cursor-pointer">
+                  <img src={personIcon} alt="Minha conta" className="h-5.5 transition-transform duration-200 hover:scale-110" />
                 </button>
+
+                {showUserMenu && (
+                  <div
+                    className="absolute right-0 top-full pt-4 z-[200]"
+                    onMouseEnter={handleUserMenuEnter}
+                    onMouseLeave={handleUserMenuLeave}
+                  >
+                    <div className="bg-white border border-gray-200 rounded-xl shadow-lg py-2 w-48">
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <p className="text-xs text-black/50 font-jakarta">Olá,</p>
+                        <p className="text-sm font-semibold font-jakarta text-black truncate capitalize">{user?.name?.split(" ")[0]?.toLowerCase()}</p>
+                      </div>
+                      <NavLink
+                        to="/minha-conta"
+                        className="flex items-center px-4 py-2.5 text-sm font-jakarta text-black hover:bg-gray-50 transition-colors"
+                      >
+                        Minha conta
+                      </NavLink>
+                      <NavLink
+                        to="/minha-conta?tab=dados"
+                        className="flex items-center px-4 py-2.5 text-sm font-jakarta text-black hover:bg-gray-50 transition-colors"
+                      >
+                        Meus dados
+                      </NavLink>
+                      <NavLink
+                        to="/minha-conta?tab=enderecos"
+                        className="flex items-center px-4 py-2.5 text-sm font-jakarta text-black hover:bg-gray-50 transition-colors"
+                      >
+                        Endereços
+                      </NavLink>
+                      <NavLink
+                        to="/minha-conta?tab=pedidos"
+                        className="flex items-center px-4 py-2.5 text-sm font-jakarta text-black hover:bg-gray-50 transition-colors"
+                      >
+                        Meus pedidos
+                      </NavLink>
+                      <div className="border-t border-gray-100 mt-1 pt-1">
+                        <button
+                          onClick={logout}
+                          className="w-full text-left px-4 py-2.5 text-sm font-jakarta text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                        >
+                          Sair
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <NavLink to="/login" className="hidden lg:block ml-[1.875rem]">
-                <img src={personIcon} alt="Login" className="h-5.5" />
+                <img src={personIcon} alt="Login" className="h-5.5 transition-transform duration-200 hover:scale-110" />
               </NavLink>
             )}
           </div>
