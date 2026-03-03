@@ -6,7 +6,7 @@ import * as Accordion from "@radix-ui/react-accordion";
 import { getProductById } from "../services/product-service";
 import type { Product } from "../types/product";
 import { useCart } from "../contexts/CartContext";
-import blackCap from "../assets/black-cap.png";
+import { getProductFallbackImage } from "../utils/product-image";
 
 export function ProductDetailsPage() {
   const { id } = useParams();
@@ -103,7 +103,7 @@ export function ProductDetailsPage() {
 
   const productImages = product.images.length > 0
     ? product.images.map((img) => img.url)
-    : [blackCap];
+    : [getProductFallbackImage(product.name)];
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -135,7 +135,7 @@ export function ProductDetailsPage() {
 
               <div className="flex-1 bg-gray-100 rounded-lg overflow-hidden aspect-square flex items-center justify-center p-8">
                 <img
-                  src={productImages[selectedImage] || blackCap}
+                  src={productImages[selectedImage]}
                   alt={product.name}
                   className="w-full h-full object-contain"
                 />
