@@ -5,16 +5,7 @@ import { ChevronDown, Plus, Minus, SlidersHorizontal, X } from "lucide-react";
 import * as Slider from "@radix-ui/react-slider";
 import { getProducts, searchProducts } from "../services/product-service";
 import type { Product } from "../types/product";
-import blackCap from "../assets/black-cap.png";
-import truckerBlack from "../assets/trucker-black.png";
-import tShortBlack from "../assets/t-short-black.png";
-
-function getFallbackImage(productName: string) {
-  const name = productName.toLowerCase();
-  if (name.includes("trucker")) return truckerBlack;
-  if (name.includes("camiseta") || name.includes("camisa")) return tShortBlack;
-  return blackCap;
-}
+import { getProductFallbackImage } from "../utils/product-image";
 
 export function AllProductsPage() {
   const navigate = useNavigate();
@@ -402,7 +393,7 @@ export function AllProductsPage() {
                       >
                         <div className="bg-[#E8DDD4] aspect-[3/4] flex items-center justify-center p-3 sm:p-4 md:p-6 relative">
                           <img
-                            src={product.images[0]?.url || getFallbackImage(product.name)}
+                            src={product.images[0]?.url ?? getProductFallbackImage(product.name)}
                             alt={product.name}
                             className="w-full h-full object-contain"
                           />

@@ -2,18 +2,7 @@ import { useEffect, useState } from "react";
 import { ProductCard } from "./ProductCard";
 import { getProducts } from "../services/product-service";
 import type { Product } from "../types/product";
-import blackCap from "../assets/black-cap.png";
-import truckerBlack from "../assets/trucker-black.png";
-import tShortBlack from "../assets/t-short-black.png";
-import americano from "../assets/Americano.png";
-
-function getFallbackImage(productName: string) {
-  const name = productName.toLowerCase();
-  if (name.includes("americano")) return americano;
-  if (name.includes("trucker")) return truckerBlack;
-  if (name.includes("camiseta") || name.includes("camisa")) return tShortBlack;
-  return blackCap;
-}
+import { getProductFallbackImage } from "../utils/product-image";
 
 export function BestSellers() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -57,7 +46,7 @@ export function BestSellers() {
                 <ProductCard
                   id={product.id}
                   title={product.name}
-                  image={product.images[0]?.url || getFallbackImage(product.name)}
+                  image={product.images[0]?.url || getProductFallbackImage(product.name)}
                   price={product.price}
                 />
               </div>
