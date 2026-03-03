@@ -2,8 +2,8 @@ import api from "./api"
 import type { Order, OrderStatus } from "../types/order"
 import type { PageResponse } from "../types/common"
 
-export async function createOrder(cartId: number, discount?: number) {
-  const { data } = await api.post<Order>("/api/orders", { cartId, discount })
+export async function createOrder(cartId: number, zipCode: string, discount?: number) {
+  const { data } = await api.post<Order>("/api/orders", { cartId, zipCode, discount })
   return data
 }
 

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router";
 import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
 import { createOrder } from "../services/order-service";
+import { calculateShipping } from "../services/shipping-service";
+import type { ShippingResponse } from "../types/shipping";
 import blackCap from "../assets/black-cap.png";
 import truckerBlack from "../assets/trucker-black.png";
 import tShortBlack from "../assets/t-short-black.png";
@@ -22,8 +24,8 @@ export function Cart() {
 
   const [artVerification, setArtVerification] = useState(false);
   const [cep, setCep] = useState("");
-  const [shippingCalculated, setShippingCalculated] = useState(false);
-  const [isNordeste, setIsNordeste] = useState(false);
+  const [shippingResponse, setShippingResponse] = useState<ShippingResponse | null>(null);
+  const [calculatingShipping, setCalculatingShipping] = useState(false);
   const [creatingOrder, setCreatingOrder] = useState(false);
   const [error, setError] = useState("");
 
@@ -39,20 +41,26 @@ export function Cart() {
   }
 
   const artVerificationPrice = artVerification ? 20.00 : 0;
-  const shippingCost = items.length > 0 && shippingCalculated ? (isNordeste ? 0 : 60.00) : 0;
+  const shippingCost = shippingResponse ? shippingResponse.shippingCost : 0;
   const finalTotal = total + artVerificationPrice + shippingCost;
 
-  const handleCalculateShipping = () => {
+  const handleCalculateShipping = async () => {
     const cleanCep = cep.replace(/\D/g, "");
     if (cleanCep.length !== 8) {
       setError("CEP inválido. Digite um CEP com 8 dígitos.");
       return;
     }
     setError("");
-    const prefix = parseInt(cleanCep.substring(0, 2), 10);
-    const nordeste = prefix >= 40 && prefix <= 65;
-    setIsNordeste(nordeste);
-    setShippingCalculated(true);
+    setCalculatingShipping(true);
+    try {
+      const response = await calculateShipping(cep);
+      setShippingResponse(response);
+    } catch {
+      setError("CEP não encontrado. Verifique e tente novamente.");
+      setShippingResponse(null);
+    } finally {
+      setCalculatingShipping(false);
+    }
   };
 
   const handleCepChange = (value: string) => {
@@ -62,9 +70,8 @@ export function Cart() {
       formatted = digits.slice(0, 5) + "-" + digits.slice(5);
     }
     setCep(formatted);
-    if (shippingCalculated) {
-      setShippingCalculated(false);
-      setIsNordeste(false);
+    if (shippingResponse) {
+      setShippingResponse(null);
     }
   };
 
@@ -91,10 +98,14 @@ export function Cart() {
       return;
     }
     if (!cart) return;
+    if (!shippingResponse) {
+      setError("Calcule o frete antes de continuar.");
+      return;
+    }
     setCreatingOrder(true);
     setError("");
     try {
-      await createOrder(cart.id, artVerification ? 0 : undefined);
+      await createOrder(cart.id, shippingResponse.zipCode, artVerification ? 0 : undefined);
       navigate("/minha-conta");
     } catch {
       setError("Erro ao criar pedido. Tente novamente.");
@@ -218,19 +229,25 @@ export function Cart() {
                 />
                 <button
                   onClick={handleCalculateShipping}
-                  className="bg-black text-white px-4 md:px-8 py-2 md:py-3 text-sm md:text-base rounded-lg font-jakarta font-medium cursor-pointer hover:bg-gray-800 transition-colors"
+                  disabled={calculatingShipping}
+                  className="bg-black text-white px-4 md:px-8 py-2 md:py-3 text-sm md:text-base rounded-lg font-jakarta font-medium cursor-pointer hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Calcular
+                  {calculatingShipping ? "..." : "Calcular"}
                 </button>
               </div>
-              {shippingCalculated && (
-                <div className="mt-3 flex justify-between items-center">
-                  <span className="font-jakarta text-sm md:text-base text-gray-600">
-                    {isNordeste ? "Região Nordeste" : "Demais regiões"}
-                  </span>
-                  <span className={`font-jakarta font-bold text-sm md:text-base ${isNordeste ? "text-green-600" : ""}`}>
-                    {isNordeste ? "Grátis" : "R$ 60,00"}
-                  </span>
+              {shippingResponse && (
+                <div className="mt-3 space-y-1">
+                  <p className="font-jakarta text-xs md:text-sm text-gray-500">
+                    {shippingResponse.city} — {shippingResponse.state}
+                  </p>
+                  <div className="flex justify-between items-center">
+                    <span className="font-jakarta text-sm md:text-base text-gray-600">
+                      {shippingResponse.region}
+                    </span>
+                    <span className={`font-jakarta font-bold text-sm md:text-base ${shippingResponse.freeShipping ? "text-green-600" : ""}`}>
+                      {shippingResponse.freeShipping ? "Grátis" : `R$ ${shippingResponse.shippingCost.toFixed(2).replace('.', ',')}`}
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
@@ -248,11 +265,11 @@ export function Cart() {
                     <span>R$ 20,00</span>
                   </div>
                 )}
-                {shippingCalculated && (
+                {shippingResponse && (
                   <div className="flex justify-between font-jakarta text-sm md:text-base">
                     <span>Frete</span>
-                    <span className={isNordeste ? "text-green-600" : ""}>
-                      {isNordeste ? "Grátis" : "R$ 60,00"}
+                    <span className={shippingResponse.freeShipping ? "text-green-600" : ""}>
+                      {shippingResponse.freeShipping ? "Grátis" : `R$ ${shippingResponse.shippingCost.toFixed(2).replace('.', ',')}`}
                     </span>
                   </div>
                 )}

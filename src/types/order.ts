@@ -22,7 +22,9 @@ export interface Order {
   status: OrderStatus
   subtotal: number
   discount: number
+  shippingCost: number
   total: number
+  zipCode: string
   clientId: number
   clientName: string
   items: OrderItem[]
