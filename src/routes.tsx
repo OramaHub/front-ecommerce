@@ -14,6 +14,7 @@ import { AdminLayout } from "./components/admin/AdminLayout";
 import { AdminDashboardPage } from "./pages/admin/AdminDashboardPage";
 import { AdminProductsPage } from "./pages/admin/AdminProductsPage";
 import { AdminClientsPage } from "./pages/admin/AdminClientsPage";
+import { AdminImagesPage } from "./pages/admin/AdminImagesPage";
 
 export function RoutesWrapper() {
   return (
@@ -37,6 +38,7 @@ export function RoutesWrapper() {
             <Route path="/admin/produtos" element={<AdminProductsPage />} />
             <Route path="/admin/pedidos" element={<Navigate to="/admin" replace />} />
             <Route path="/admin/clientes" element={<AdminClientsPage />} />
+            <Route path="/admin/imagens" element={<AdminImagesPage />} />
           </Route>
         </Route>
       </Routes>
