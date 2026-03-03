@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { X, Trash2, Upload, ImageOff, Check } from "lucide-react"
+import { X, Upload, ImageOff, Check } from "lucide-react"
 import type { AdminProduct, ProductImage } from "../../types/product"
 import type { MediaImage } from "../../types/media"
 import { getMedia, uploadMedia } from "../../services/media-service"
