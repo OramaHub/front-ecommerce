@@ -15,9 +15,19 @@ export default {
           '0%': { opacity: '0', transform: 'translateY(6px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        'glass-shimmer': {
+          '0%': { transform: 'translateX(-100%) rotate(15deg)' },
+          '100%': { transform: 'translateX(200%) rotate(15deg)' },
+        },
+        'glass-float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.4s ease-out',
+        'glass-shimmer': 'glass-shimmer 1.2s ease-in-out',
+        'glass-float': 'glass-float 3s ease-in-out infinite',
       },
     },
   },
