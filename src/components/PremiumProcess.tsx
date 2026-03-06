@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import tecido from "../assets/tecido.png";
-import man from "../assets/man.png";
+import { R2_BASE } from "../constants/r2";
+
+const tecido = `${R2_BASE}/tecido.png`;
+const man = `${R2_BASE}/man.png`;
 
 const FEATURES = [
   {
@@ -92,8 +94,8 @@ export function PremiumProcess() {
               <div
                 key={feat.number}
                 className={`flex gap-5 transition-all duration-700 ease-out ${revealed
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
                   }`}
                 style={{ transitionDelay: `${200 + idx * 150}ms` }}
               >

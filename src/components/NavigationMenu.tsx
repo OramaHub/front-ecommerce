@@ -2,9 +2,11 @@ import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { NavLink, useNavigate } from "react-router";
 import chevronIcon from "../assets/chevrondown-icon.svg";
 import { useState } from "react";
-import blackCap from "../assets/black-cap.png";
-import truckerBlack from "../assets/trucker-black.png";
-import tShortBlack from "../assets/t-short-black.png";
+import { R2_BASE } from "../constants/r2";
+
+const blackCap = `${R2_BASE}/black-cap.png`;
+const truckerBlack = `${R2_BASE}/trucker-black.png`;
+const tShortBlack = `${R2_BASE}/t-short-black.png`;
 
 interface SubItem {
   title: string;

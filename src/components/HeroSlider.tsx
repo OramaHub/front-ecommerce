@@ -1,7 +1,9 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
-import bannerImg from '../assets/banner1.jpg';
-import bannerMobileImg from '../assets/banner1mobile.jpg';
+import { R2_BASE } from '../constants/r2';
+
+const bannerImg = `${R2_BASE}/banner1.jpg`;
+const bannerMobileImg = `${R2_BASE}/banner1mobile.jpg`;
 
 import 'swiper/css';
 import 'swiper/css/pagination';

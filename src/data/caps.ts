@@ -1,9 +1,10 @@
+import { R2_BASE } from "../constants/r2";
 import type { Cap } from "../types/cap";
 
 export const caps: Cap[] = [
   {
     id: 1,
-    src: "/images/products/1.png",
+    src: `${R2_BASE}/1.png`,
     label: "Modelo 1",
     tagline: "Natureza, conforto e muito estilo.",
     description: "Este modelo une tons terrosos que remetem à natureza e ao conforto. É a escolha ideal para aquele café descontraído ou um passeio ao ar livre no fim de tarde. Um toque de sobriedade que nunca sai de moda.",
@@ -11,7 +12,7 @@ export const caps: Cap[] = [
   },
   {
     id: 2,
-    src: "/images/products/2.png",
+    src: `${R2_BASE}/2.png`,
     label: "Modelo 2",
     tagline: "Tão à vontade no mar quanto no asfalto.",
     description: "Com uma pegada clássica e sofisticada, este modelo transita entre o deck de um barco e a correria da cidade com a mesma naturalidade. O azul marinho traz a autoridade, enquanto o branco garante o frescor.",
@@ -19,7 +20,7 @@ export const caps: Cap[] = [
   },
   {
     id: 3,
-    src: "/images/products/3.png",
+    src: `${R2_BASE}/3.png`,
     label: "Modelo 3",
     tagline: "Branco que não precisa se explicar.",
     description: "Este é o modelo para quem não precisa de cores para se destacar. Perfeito para dias de sol intenso ou para iluminar um look monocromático. Leveza absoluta para quem vive intensamente o verão.",
@@ -27,7 +28,7 @@ export const caps: Cap[] = [
   },
   {
     id: 4,
-    src: "/images/products/4.png",
+    src: `${R2_BASE}/4.png`,
     label: "Modelo 4",
     tagline: "A cidade também é selvagem.",
     description: "Com uma estética militar urbana, este boné foi feito para quem tem o pé na estrada e a mente na aventura. Resistente no visual e impecável no estilo, ele é o parceiro certo para trilhas ou para o concreto da metrópole.",
@@ -35,7 +36,7 @@ export const caps: Cap[] = [
   },
   {
     id: 6,
-    src: "/images/products/6.png",
+    src: `${R2_BASE}/6.png`,
     label: "Modelo 6",
     tagline: "O coringa que nunca fica em casa.",
     description: "A base clara traz leveza, enquanto a aba preta entrega a atitude necessária para qualquer rolê noturno. Se você busca uma peça coringa que combina com todo o seu guarda-roupa, acabou de encontrar.",

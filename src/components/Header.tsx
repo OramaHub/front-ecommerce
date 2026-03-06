@@ -4,9 +4,7 @@ import searchIcon from "../assets/search-icon.svg";
 import cartIcon from "../assets/cart-icon.svg";
 import personIcon from "../assets/person-icon.svg";
 import headsetIcon from "../assets/headset-icon.svg";
-import blackCap from "../assets/black-cap.png";
-import truckerBlack from "../assets/trucker-black.png";
-import tShortBlack from "../assets/t-short-black.png";
+import { R2_BASE } from "../constants/r2";
 import { AppNavigationMenu } from "./NavigationMenu";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
@@ -15,9 +13,9 @@ import type { Product } from "../types/product";
 
 function getFallbackImage(productName: string) {
   const name = productName.toLowerCase();
-  if (name.includes("trucker")) return truckerBlack;
-  if (name.includes("camiseta") || name.includes("camisa")) return tShortBlack;
-  return blackCap;
+  if (name.includes("trucker")) return `${R2_BASE}/trucker-black.png`;
+  if (name.includes("camiseta") || name.includes("camisa")) return `${R2_BASE}/t-short-black.png`;
+  return `${R2_BASE}/black-cap.png`;
 }
 
 const topBarMessages = [
@@ -301,7 +299,7 @@ export function Header() {
 
       <nav className="hidden lg:block border-t border-gray-200">
         <div className="max-w-[1600px] mx-auto pl-16">
-            <AppNavigationMenu />
+          <AppNavigationMenu />
         </div>
       </nav>
 

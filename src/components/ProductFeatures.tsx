@@ -1,5 +1,7 @@
-import tsCap from "../assets/tscap.png";
-import tsPerso from "../assets/tsperso.png";
+import { R2_BASE } from "../constants/r2";
+
+const tsCap = `${R2_BASE}/tscap.png`;
+const tsPerso = `${R2_BASE}/tsperso.png`;
 
 export function ProductFeatures() {
   return (

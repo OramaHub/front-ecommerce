@@ -6,15 +6,13 @@ import { useAuth } from "../contexts/AuthContext";
 import { createOrder } from "../services/order-service";
 import { calculateShipping } from "../services/shipping-service";
 import type { ShippingResponse } from "../types/shipping";
-import blackCap from "../assets/black-cap.png";
-import truckerBlack from "../assets/trucker-black.png";
-import tShortBlack from "../assets/t-short-black.png";
+import { R2_BASE } from "../constants/r2";
 
 function getFallbackImage(productName: string) {
   const name = productName.toLowerCase();
-  if (name.includes("trucker")) return truckerBlack;
-  if (name.includes("camiseta") || name.includes("camisa")) return tShortBlack;
-  return blackCap;
+  if (name.includes("trucker")) return `${R2_BASE}/trucker-black.png`;
+  if (name.includes("camiseta") || name.includes("camisa")) return `${R2_BASE}/t-short-black.png`;
+  return `${R2_BASE}/black-cap.png`;
 }
 
 export function Cart() {
