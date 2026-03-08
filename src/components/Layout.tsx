@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router";
 import { Header } from "./Header";
+import { ChatBot } from "./chatbot/ChatBot";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -21,6 +22,8 @@ export function Layout() {
       <main>
         <Outlet />
       </main>
+
+      <ChatBot />
     </div>
   );
 }
