@@ -8,6 +8,7 @@ import { ProductDetailsPage } from "./pages/ProductDetailsPage";
 import { MyAccountPage } from "./pages/MyAccountPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
+import { StudioPage } from "./pages/StudioPage";
 import { Layout } from "./components/Layout";
 import { AdminRoute } from "./components/AdminRoute";
 import { AdminLayout } from "./components/admin/AdminLayout";
@@ -20,6 +21,8 @@ export function RoutesWrapper() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/personalize" element={<StudioPage />} />
+
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/produtos" element={<AllProductsPage />} />
