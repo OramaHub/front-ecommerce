@@ -54,7 +54,7 @@ export function PremiumProcess() {
         {/* ── Header ── */}
         <div className="text-center mb-16 md:mb-24">
           <p className="font-jakarta text-[0.7rem] md:text-xs font-semibold tracking-[0.25em] uppercase text-[#86868b] mb-3">
-            Our process
+            Nosso processo
           </p>
           <h2 className="font-jakarta text-3xl md:text-5xl lg:text-[3.5rem] font-bold text-[#1d1d1f] leading-[1.05] tracking-tight">
             Como produzimos
@@ -99,7 +99,7 @@ export function PremiumProcess() {
                   }`}
                 style={{ transitionDelay: `${200 + idx * 150}ms` }}
               >
-                <span className="font-jakarta text-3xl md:text-4xl font-bold text-[#e5e5e5] leading-none flex-shrink-0">
+                <span className="font-jakarta text-3xl md:text-4xl font-bold text-[#d0d0d0] leading-none flex-shrink-0">
                   {feat.number}
                 </span>
                 <div>
@@ -133,7 +133,7 @@ export function PremiumProcess() {
             </p>
             <a
               href="/produtos"
-              className="inline-block mt-3 font-jakarta text-sm font-medium text-[#1d1d1f] border-b border-[#1d1d1f] pb-0.5 transition-colors duration-200 hover:text-[#0066CC] hover:border-[#0066CC]"
+              className="inline-block mt-3 font-jakarta text-sm font-medium text-[#1d1d1f] border-b border-[#1d1d1f] pb-0.5 transition-opacity duration-200 hover:opacity-60"
             >
               Conheça nossos modelos
             </a>

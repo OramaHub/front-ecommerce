@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer className="bg-black text-white py-12 md:py-16 lg:py-24">
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 md:gap-12 lg:gap-48">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 md:gap-12 lg:gap-20">
           <div className="flex-1 max-w-[350px]">
             <h2 className="text-xl font-bold mb-3 font-jakarta">MT PERSONALIZADOS</h2>
             <p className="text-xs text-white/70 leading-relaxed font-jakarta">

@@ -40,8 +40,7 @@ function TopBarCarousel() {
       <div className="max-w-[1600px] mx-auto flex items-center justify-center py-2">
         <span
           key={current}
-          className="text-black text-sm animate-fade-in"
-          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 400 }}
+          className="text-black text-sm font-jakarta animate-fade-in"
         >
           {topBarMessages[current]}
         </span>
@@ -145,7 +144,7 @@ export function Header() {
           </button>
 
           <div className="pl-0 lg:pl-16">
-            <NavLink to="/" className="text-base md:text-lg lg:text-2xl font-bold text-black font-jakarta">
+            <NavLink to="/" className="text-base md:text-lg lg:text-2xl font-bold text-black font-jakarta inline-block transition-transform duration-200 hover:scale-[1.03]">
               MT PERSONALIZADOS
             </NavLink>
           </div>
